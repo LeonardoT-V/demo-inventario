@@ -18,8 +18,6 @@ export const createUserSession = async (userData: LoginResponse, redirectTo: str
   const session = await getSession()
   session.set("userData", userData);
 
-  console.log({ session });
-
   return redirect(redirectTo, {
     headers: {
       "Set-Cookie": await commitSession(session)
@@ -36,8 +34,6 @@ const getUserSession = (request: Request) => {
 export const getUserData = async (request: Request): Promise<LoginResponse | null> => {
   const session = await getUserSession(request)
   const userData = session.get("userData")
-
-  console.log({ userData });
 
   if (!userData) return null
   return userData
