@@ -1,6 +1,7 @@
 import { createCookieSessionStorage, redirect } from "@remix-run/node";
 import { Cookies_Name } from "./session.server";
 import { LoginResponse } from "@/types";
+import { ROUTES_DIRECTION } from "@/lib/routes";
 
 const { commitSession, destroySession, getSession } = createCookieSessionStorage({
   cookie: {
@@ -43,14 +44,11 @@ export const getUserData = async (request: Request): Promise<LoginResponse | nul
 }
 
 // fucntion to redirect user to login if no user data found in session
-export const requireUser = async (request: Request, redirectTo: string = new URL(request.url).pathname): Promise<LoginResponse | null> => {
+export const requireUser = async (request: Request): Promise<LoginResponse | null> => {
   const userData = await getUserData(request)
 
   if (!userData) {
-    const searchParams = new URLSearchParams([
-      ["redirectTo", redirectTo]
-    ])
-    throw redirect(`/sign-in?${searchParams}`)
+    throw redirect(ROUTES_DIRECTION.login.path)
   }
 
   return userData
@@ -60,7 +58,7 @@ export const requireUser = async (request: Request, redirectTo: string = new URL
 export const logout = async (request: Request) => {
   const session = await getUserSession(request);
 
-  return redirect("/sign-in", {
+  return redirect(ROUTES_DIRECTION.login.path, {
     headers: {
       "Set-Cookie": await destroySession(session)
     }
