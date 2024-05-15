@@ -1,3 +1,4 @@
+import { ROUTES_DIRECTION } from "@/lib/routes"
 import { createCookieSessionStorage } from "@remix-run/node"
 import { createThemeSessionResolver } from "remix-themes"
 
@@ -6,6 +7,8 @@ export const Cookies_Name = {
   user: 'user',
   career: 'career',
 }
+
+export const Routes_Exclude = [ROUTES_DIRECTION.login.path, ROUTES_DIRECTION.sigin.path]
 
 // const isProduction = process.env.NODE_ENV === "production"
 
