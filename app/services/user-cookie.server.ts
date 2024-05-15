@@ -42,6 +42,16 @@ export const getUserData = async (request: Request): Promise<LoginResponse | nul
 // fucntion to redirect user to login if no user data found in session
 export const requireUser = async (request: Request): Promise<LoginResponse | null> => {
   const userData = await getUserData(request)
+  const routesExclude = [ROUTES_DIRECTION.login.path, ROUTES_DIRECTION.sigin.path]
+  const url = new URL(request.url).pathname
+
+  if (userData && routesExclude.some(route => route === url)) {
+    throw redirect(ROUTES_DIRECTION.inicio.path)
+  }
+  // TODO: comprobar funcionamiento
+  if (routesExclude.some(route => route === url)) {
+    return null
+  }
 
   if (!userData) {
     throw redirect(ROUTES_DIRECTION.login.path)
