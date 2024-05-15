@@ -10,5 +10,11 @@ export const ROUTES_DIRECTION = {
   ...ROUTES,
   'select-place': {
     name: 'Seleccionar lugar', path: '/select-place'
+  },
+  'login': {
+    name: 'Iniciar Sesion', path: '/login'
+  },
+  'sigin': {
+    name: 'Registrar cuenta', path: '/sigin'
   }
 }
