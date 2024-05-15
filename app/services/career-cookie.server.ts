@@ -1,6 +1,7 @@
 import { createCookieSessionStorage, redirect } from "@remix-run/node";
 import { Cookies_Name } from "./session.server";
 import { CareerLocation } from "@/types";
+import { ROUTES_DIRECTION } from "@/lib/routes";
 
 const { commitSession, getSession } = createCookieSessionStorage({
   cookie: {
@@ -42,10 +43,7 @@ export const requireCareerLocation = async (request: Request): Promise<CareerLoc
   const careerLocation = await getCareerLocationData(request)
 
   if (!careerLocation) {
-    const searchParams = new URLSearchParams([
-      ["redirectTo", 'redirectTo']
-    ])
-    throw redirect(`/sign-in?${searchParams}`)
+    throw redirect(ROUTES_DIRECTION["select-place"].path)
   }
   return careerLocation
 }
