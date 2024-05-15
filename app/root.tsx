@@ -28,8 +28,8 @@ export const links: LinksFunction = () => [{ rel: "stylesheet", href: style }];
 export const meta: MetaFunction = () => {
   return [
     {
-      title: "Remix: Search a TV show",
-      description: "Search a TV show",
+      title: "Sistema de inventario",
+      description: "Sistema de inventario y mantenimientos",
     },
   ];
 };
