@@ -1,5 +1,5 @@
 import { createCookieSessionStorage, redirect } from "@remix-run/node";
-import { Cookies_Name } from "./session.server";
+import { Cookies_Name, Routes_Exclude } from "./session.server";
 import { CareerLocation } from "@/types";
 import { ROUTES_DIRECTION } from "@/lib/routes";
 
@@ -41,6 +41,12 @@ export const getCareerLocationData = async (request: Request): Promise<CareerLoc
 // function to redirect user to login if no user data found in session
 export const requireCareerLocation = async (request: Request): Promise<CareerLocation | null> => {
   const careerLocation = await getCareerLocationData(request)
+
+  const url = new URL(request.url).pathname
+  // TODO: VERIFICAR EL FUNCIONAMIENTO
+  if (careerLocation && Routes_Exclude.some(route => route === url)) {
+    throw redirect(ROUTES_DIRECTION.inicio.path)
+  }
 
   if (!careerLocation) {
     throw redirect(ROUTES_DIRECTION["select-place"].path)
