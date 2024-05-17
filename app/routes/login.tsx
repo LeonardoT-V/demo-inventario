@@ -36,7 +36,6 @@ export async function action({ request }: ActionFunctionArgs) {
 
     const { jwt, user, error }: LoginResponse = await hola.json();
     if (error) throw { [error.name]: error.message };
-    console.log(user);
     return createUserSession(
       { jwt, user },
       ROUTES_DIRECTION["select-place"].path
