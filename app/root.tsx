@@ -23,6 +23,7 @@ import "@fontsource-variable/onest";
 import clsx from "clsx";
 import WithNavLayout from "./components/layouts/with-nav";
 import { getCareerLocationData } from "./services/career-cookie.server";
+import { requireUser } from "./services/user-cookie.server";
 
 export const links: LinksFunction = () => [{ rel: "stylesheet", href: style }];
 export const meta: MetaFunction = () => {
@@ -34,6 +35,7 @@ export const meta: MetaFunction = () => {
   ];
 };
 export async function loader({ request }: LoaderFunctionArgs) {
+  await requireUser(request);
   const { getTheme } = await themeSessionResolver(request);
   const careerLocation = await getCareerLocationData(request);
   return {
