@@ -6,8 +6,10 @@ import paginationUtil from "@/lib/pagination";
 import Paginator from "@/components/Paginator";
 import InputSearchInventory from "@/components/inventario/input-search-inventory";
 import ListArticles from "@/components/inventario/list-articles";
+import { requireCareerLocation } from "@/services/career-cookie.server";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
+  await requireCareerLocation(request);
   const requestParam = paginationUtil(new URL(request.url));
   return json({
     articulos: await getAllArticles({
