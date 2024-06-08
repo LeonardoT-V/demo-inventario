@@ -24,6 +24,7 @@ import clsx from "clsx";
 import WithNavLayout from "./components/layouts/with-nav";
 import { getCareerLocationData } from "./services/career-cookie.server";
 import { requireUser } from "./services/user-cookie.server";
+import { Toaster } from "./components/ui/sonner";
 
 export const links: LinksFunction = () => [{ rel: "stylesheet", href: style }];
 export const meta: MetaFunction = () => {
@@ -68,6 +69,7 @@ export function App() {
       <body className="flex h-screen min-h-screen w-screen gap-8">
         <WithNavLayout careerLocation={data.careerLocation}>
           <Outlet />
+          <Toaster richColors theme={theme as any} />
         </WithNavLayout>
         <ScrollRestoration />
         <Scripts />
