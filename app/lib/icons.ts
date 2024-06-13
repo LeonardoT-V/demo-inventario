@@ -1,5 +1,5 @@
 import { DotFilledIcon, Pencil1Icon, CrossCircledIcon, SewingPinFilledIcon, MixerVerticalIcon } from "@radix-ui/react-icons"
-import { BuildingApartment, GraduationCap, Moon, Sun, Image, ArrowClockwise, House, Archive, PlusCircle, ArrowsLeftRight, SignOut, GearSix, MagnifyingGlass } from '@phosphor-icons/react'
+import { BuildingApartment, GraduationCap, Moon, Sun, Image, ArrowClockwise, House, Archive, PlusCircle, ArrowsLeftRight, SignOut, GearSix, MagnifyingGlass, Eye } from '@phosphor-icons/react'
 export const IconHome = House
 export const IconPlusCircle = PlusCircle
 export const IconArchive = Archive
