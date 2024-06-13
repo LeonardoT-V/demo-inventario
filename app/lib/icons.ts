@@ -18,3 +18,4 @@ export const IconSun = Sun
 export const IconMoon = Moon
 export const IconCareer = GraduationCap
 export const IconUniversity = BuildingApartment
+export const IconEye = Eye
