@@ -27,7 +27,17 @@ export interface Articulo extends StrapiDefaultResponse {
   condicion: Condicion;
   registros: Registro[];
   carrera: Carrera;
+  mantenimientos: Mantenimiento[]
 }
+
+export interface Mantenimiento extends StrapiDefaultResponse {
+  tipo: string
+  comentario?: string
+  encargado: Profile
+  detalle: string
+  articulo: Articulo
+}
+
 export interface Registro extends StrapiDefaultResponse {
   id: number;
   detalle: string;
