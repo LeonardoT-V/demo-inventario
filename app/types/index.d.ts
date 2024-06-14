@@ -28,6 +28,7 @@ export interface Articulo extends StrapiDefaultResponse {
   url_img: string;
   aula: string;
   registros: Registro[];
+  registrado: Profile;
   carrera: Carrera;
   mantenimientos: Mantenimiento[]
 }
