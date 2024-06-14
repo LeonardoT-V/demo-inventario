@@ -18,3 +18,12 @@ export const ROUTES_DIRECTION = {
     name: 'Registrar cuenta', path: '/sigin'
   }
 }
+
+export const ACTIONS_MAINTANCE = {
+  REGISTER: 'create-maintance'
+}
+
+export const ACTIONS_ARTICLE = {
+  DISABLE: 'disable-article',
+  ACTIVE: 'active-article',
+}
