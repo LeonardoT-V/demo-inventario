@@ -63,6 +63,20 @@ export interface Carrera extends StrapiDefaultResponse {
   habilitado: boolean;
   facultad: Facultad;
 }
+
+export interface Cambio extends StrapiDefaultResponse {
+  id: number;
+  responsable: Profile;
+  tipo: TipoCambio;
+  articulo: Articulo;
+  comentario: string;
+  prev_value?: string;
+  prev_carrera?: string;
+  llave: string;
+}
+
+export type TipoCambio = 'edit' | 'create' | 'disable' | 'active'
+
 export interface Facultad extends StrapiDefaultResponse {
   id: number;
   nombre: string;
