@@ -127,7 +127,7 @@ export type LoginResponse = ErrorResponse & {
 };
 
 export type ErrorResponse = {
-  data?: object;
+  data: object;
   error?: {
     status: number;
     name: string;
