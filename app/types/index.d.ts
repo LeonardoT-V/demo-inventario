@@ -53,10 +53,6 @@ export interface User extends StrapiDefaultResponse {
   username: string;
   email: Articulo;
 }
-export interface Condicion extends StrapiDefaultResponse {
-  id: number;
-  detalle: string;
-}
 
 export interface Carrera extends StrapiDefaultResponse {
   id: number;
