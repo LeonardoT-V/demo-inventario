@@ -157,3 +157,9 @@ export type CareerLocation = {
   faculty?: Facultad;
   career?: Carrera;
 }
+
+interface ReturnedMessage {
+  detail: string;
+  message: string;
+  type?: 'default' | 'error' | 'success' | 'info'
+}
