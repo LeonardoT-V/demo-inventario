@@ -8,8 +8,16 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { createNewArticleEntry } from "@/db/query.nuevo-registro";
+import { getCareerLocationData } from "@/services/career-cookie.server";
+import { getUserData } from "@/services/user-cookie.server";
 
-import type { ActionFunctionArgs, MetaFunction } from "@remix-run/node";
+import type {
+  ActionFunctionArgs,
+  MetaFunction,
+  LoaderFunctionArgs,
+} from "@remix-run/node";
+import { useLoaderData } from "@remix-run/react";
 
 export const meta: MetaFunction = () => {
   return [
@@ -21,14 +29,33 @@ export const meta: MetaFunction = () => {
   ];
 };
 
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  return {
+    location: (await getCareerLocationData(request))!,
+  };
+};
+
 export const action = async ({ request }: ActionFunctionArgs) => {
   const hola = await request.formData();
+  const location = await getCareerLocationData(request);
+  const user = await getUserData(request);
   const pp = Object.fromEntries(hola);
-  console.log(pp);
-  return "hola";
+
+  const parsedData = {
+    nombre: pp.nombre,
+    descripcion: pp.descripcion,
+    condicion: pp.condicion,
+    aula: pp.aula,
+    carrera: location?.career?.id,
+    registrado: user?.user?.id,
+    url_img: pp.imagen,
+  };
+  const psoe = await createNewArticleEntry(parsedData, user?.jwt);
+  return psoe;
 };
 
 export default function NuevoRegistro() {
+  const { location } = useLoaderData<typeof loader>();
   return (
     <SectionWithHeader title="Nuevo Registro">
       <Card>
@@ -40,7 +67,7 @@ export default function NuevoRegistro() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <FormRegisterElement />
+          <FormRegisterElement location={location} />
         </CardContent>
       </Card>
     </SectionWithHeader>
