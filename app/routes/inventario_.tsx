@@ -7,16 +7,20 @@ import Paginator from "@/components/Paginator";
 import InputSearchInventory from "@/components/inventario/input-search-inventory";
 import ListArticles from "@/components/inventario/list-articles";
 import { requireCareerLocation } from "@/services/career-cookie.server";
+import GridContainer from "@/components/grid-container";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   await requireCareerLocation(request);
   const requestParam = paginationUtil(new URL(request.url));
   return json({
-    articulos: await getAllArticles({
-      size: requestParam.sizeParam,
-      actualPage: requestParam.actualPage,
-      search: requestParam.searchParam,
-    }),
+    articulos: await getAllArticles(
+      {
+        size: requestParam.sizeParam,
+        actualPage: requestParam.actualPage,
+        search: requestParam.searchParam,
+      },
+      request
+    ),
     params: requestParam,
   });
 };
@@ -30,9 +34,9 @@ export default function Inventario() {
         <header className="mb-2.5 flex items-center justify-end gap-24">
           <InputSearchInventory />
         </header>
-        <section className="mb-2.5 grid grid-cols-3 gap-2.5 lg:grid-cols-4">
+        <GridContainer>
           <ListArticles articulos={articulos.data} />
-        </section>
+        </GridContainer>
         <footer>
           <Paginator pagination={articulos.meta} params={params} />
         </footer>
