@@ -47,12 +47,11 @@ const linkVariants = cva(
 export default function NavLink({ to, name, Icon }: NavLinkProps) {
   return (
     <Nav
-      end
       to={to}
       className={({ isActive }) =>
         isActive
           ? `${defaultStyle} bg-primary/50 font-medium`
-          : `${defaultStyle} text-foreground/50 hover:text-foreground`
+          : `${defaultStyle} text-muted-foreground/70 hover:text-foreground`
       }
     >
       <Icon size="16" weight="light" />
