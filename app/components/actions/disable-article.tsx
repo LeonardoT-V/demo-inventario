@@ -12,6 +12,8 @@ import {
 import { Button } from "../ui";
 import { Form } from "@remix-run/react";
 import { ACTIONS_ARTICLE } from "@/lib/routes";
+import InputLabel from "../input-label";
+import { TIPO_EDIT_ARTICLE } from "@/lib/const";
 
 export default function DisableArticleAction() {
   return (
@@ -34,7 +36,18 @@ export default function DisableArticleAction() {
               </span>{" "}
               para confirmar esta acción.
             </DialogDescription>
-            <input name="tipo_register" value="disable" hidden />
+            <input
+              name="tipo_register"
+              value={TIPO_EDIT_ARTICLE.DISABLE}
+              hidden
+            />
+            <InputLabel
+              isTextArea
+              label="comentario"
+              placeholder="Ingrese un comentario (Opcional)"
+            />
+            <input name="prev_value" value="true" hidden />
+            <input name="llave" value="habilitado" hidden />
           </DialogHeader>
           <DialogFooter className="mt-8">
             <DialogClose asChild>
