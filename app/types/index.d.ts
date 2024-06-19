@@ -74,7 +74,8 @@ export interface Cambio extends StrapiDefaultResponse {
   llave: string;
 }
 
-export type TipoCambio = 'edit' | 'create' | 'disable' | 'active'
+export type TipoCambioKey = keyof typeof TIPO_EDIT_ARTICLE
+export type TipoCambio = typeof TIPO_EDIT_ARTICLE[TipoCambioKey]
 
 export interface Facultad extends StrapiDefaultResponse {
   id: number;
