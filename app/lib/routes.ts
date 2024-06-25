@@ -26,4 +26,5 @@ export const ACTIONS_MAINTANCE = {
 export const ACTIONS_ARTICLE = {
   DISABLE: 'disable-article',
   ACTIVE: 'active-article',
+  EDIT: 'edit-article',
 }
