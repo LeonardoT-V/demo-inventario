@@ -1,4 +1,5 @@
 import paginationUtil from "@/lib/pagination";
+import { TIPO_EDIT_ARTICLE } from '@/lib/const'
 
 export interface GetArticuloResponse {
   data: Articulo[];
@@ -30,7 +31,8 @@ export interface Articulo extends StrapiDefaultResponse {
   registros: Registro[];
   registrado: Profile;
   carrera: Carrera;
-  mantenimientos: Mantenimiento[]
+  mantenimientos: Mantenimiento[];
+  cambios: Cambio[];
 }
 
 export interface Mantenimiento extends StrapiDefaultResponse {
