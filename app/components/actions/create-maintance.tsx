@@ -1,4 +1,4 @@
-import { IconLocation, IconPlusCircle } from "@/lib/icons";
+import { IconPlus, IconPlusCircle } from "@/lib/icons";
 import {
   Dialog,
   DialogClose,
@@ -19,7 +19,7 @@ export default function CreateMaintanceAction() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline" icon={<IconLocation className="mr-1.5" />}>
+        <Button variant="outline" icon={<IconPlus className="mr-1.5" />}>
           Mantenimiento
         </Button>
       </DialogTrigger>
