@@ -10,18 +10,31 @@ import {
 import { FormatToDateSmall } from "@/lib/date";
 import ModalMantenimientoInfo from "./modal-matenimiento-info";
 import { Badge } from "./ui";
+import { Card } from "./ui/card";
+import { IconMaintance } from "@/lib/icons";
+import CreateMaintanceAction from "./actions/create-maintance";
 
 export default function TableMantenimientos({
-  mantenimientos,
+  mantenimientos = [],
 }: {
   mantenimientos: Mantenimiento[];
 }) {
-  console.log(mantenimientos);
+  if (mantenimientos.length === 0 || !mantenimientos) {
+    return (
+      <Card className="flex flex-col items-center gap-4 p-8">
+        <p className="inline-flex items-center gap-1.5 text-lg text-muted-foreground 2xl:text-2xl">
+          <IconMaintance />
+          <span>No existen mantenimientos</span>
+        </p>
+        <CreateMaintanceAction />
+      </Card>
+    );
+  }
 
   return (
     <Table className="w-full ">
       <TableHeader>
-        <TableRow>
+        <TableRow className="bg-card">
           <TableHead className="w-[100px]">Registado</TableHead>
           <TableHead>Realizado por</TableHead>
           <TableHead className="w-full">Detalle</TableHead>
