@@ -3,4 +3,5 @@ export const TIPO_EDIT_ARTICLE = {
   CREATE: 'create',
   DISABLE: 'disable',
   ACTIVE: 'active',
+  MOVE: 'move',
 } as const
