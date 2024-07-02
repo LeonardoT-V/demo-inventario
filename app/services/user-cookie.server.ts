@@ -31,7 +31,10 @@ const getUserSession = (request: Request) => {
 }
 
 // function to get user data from session
-export const getUserData = async (request: Request): Promise<LoginResponse | null> => {
+export const getUserData = async (request?: Request): Promise<LoginResponse | null> => {
+  if (!request) {
+    return null
+  }
   const session = await getUserSession(request)
   const userData = session.get("userData")
 
