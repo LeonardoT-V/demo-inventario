@@ -19,7 +19,7 @@ export default function CreateMaintanceAction() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline" icon={<IconPlus className="mr-1.5" />}>
+        <Button variant="secondary" icon={<IconPlus className="mr-1.5" />}>
           Mantenimiento
         </Button>
       </DialogTrigger>

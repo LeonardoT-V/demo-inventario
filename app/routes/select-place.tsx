@@ -7,7 +7,7 @@ import { IconUniversity } from "@/lib/icons";
 import { ROUTES_DIRECTION } from "@/lib/routes";
 import { createCareerLocationSession } from "@/services/career-cookie.server";
 import { CareerLocation } from "@/types";
-import { ActionFunctionArgs } from "@remix-run/node";
+import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { json, useLoaderData, Form } from "@remix-run/react";
 import { useState } from "react";
 

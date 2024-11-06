@@ -9,7 +9,10 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { createNewArticleEntry } from "@/db/query.nuevo-registro";
-import { getCareerLocationData } from "@/services/career-cookie.server";
+import {
+  getCareerLocationData,
+  requireCareerLocation,
+} from "@/services/career-cookie.server";
 import { getUserData } from "@/services/user-cookie.server";
 
 import type {
@@ -18,6 +21,8 @@ import type {
   LoaderFunctionArgs,
 } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
+import { redirect } from "@remix-run/node";
+import { ROUTES } from "@/lib/routes";
 
 export const meta: MetaFunction = () => {
   return [
@@ -30,6 +35,7 @@ export const meta: MetaFunction = () => {
 };
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
+  await requireCareerLocation(request);
   return {
     location: (await getCareerLocationData(request))!,
   };
@@ -51,7 +57,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     url_img: pp.imagen,
   };
   const psoe = await createNewArticleEntry(parsedData, user?.jwt);
-  return psoe;
+  return redirect(`${ROUTES.inventario.path}/${psoe.data.id}`);
 };
 
 export default function NuevoRegistro() {

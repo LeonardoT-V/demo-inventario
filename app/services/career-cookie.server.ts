@@ -3,7 +3,7 @@ import { Cookies_Name, Routes_Exclude } from "./session.server";
 import { CareerLocation } from "@/types";
 import { ROUTES_DIRECTION } from "@/lib/routes";
 
-const { commitSession, getSession } = createCookieSessionStorage({
+const { commitSession, getSession, destroySession } = createCookieSessionStorage({
   cookie: {
     name: Cookies_Name.career,
     path: "/",
@@ -52,4 +52,14 @@ export const requireCareerLocation = async (request: Request): Promise<CareerLoc
     throw redirect(ROUTES_DIRECTION["select-place"].path)
   }
   return careerLocation
+}
+
+export const deleteCareerData = async (request: Request) => {
+  const session = await getCareerLocationSession(request);
+  // return redirect(ROUTES_DIRECTION["select-place"].path, {
+  //   headers: {
+  //     "Set-Cookie": await destroySession(session),
+  //   }
+  // })
+  return await destroySession(session)
 }

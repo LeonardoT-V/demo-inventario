@@ -137,7 +137,7 @@ const DropdownMenuDoubleCheckboxItem = React.forwardRef<
     {...props}
   >
     <span className="absolute left-2 flex size-3.5 items-center justify-center">
-      <Icon className="size-4 " />
+      <Icon />
     </span>
     {children}
   </DropdownMenuPrimitive.CheckboxItem>

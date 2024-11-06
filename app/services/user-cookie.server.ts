@@ -2,6 +2,7 @@ import { createCookieSessionStorage, redirect } from "@remix-run/node";
 import { Cookies_Name, Routes_Exclude } from "./session.server";
 import { LoginResponse } from "@/types";
 import { ROUTES_DIRECTION } from "@/lib/routes";
+import { deleteCareerData } from "./career-cookie.server";
 
 const { commitSession, destroySession, getSession } = createCookieSessionStorage({
   cookie: {
@@ -66,10 +67,10 @@ export const requireUser = async (request: Request): Promise<LoginResponse | nul
 // function to remove user data from session, logging user out
 export const logout = async (request: Request) => {
   const session = await getUserSession(request);
-
+  const headers = new Headers()
+  headers.append('Set-Cookie', await destroySession(session))
+  headers.append('Set-Cookie', await deleteCareerData(request))
   return redirect(ROUTES_DIRECTION.login.path, {
-    headers: {
-      "Set-Cookie": await destroySession(session)
-    }
+    headers
   })
 }

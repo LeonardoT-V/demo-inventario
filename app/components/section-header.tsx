@@ -1,7 +1,7 @@
 import type { ComponentPropsWithoutRef } from "react";
 
 interface SectionWithHeaderProps extends ComponentPropsWithoutRef<"section"> {
-  title: string;
+  title?: string;
   position?: "default" | "center";
 }
 
@@ -14,8 +14,14 @@ function SectionWithHeader({
     <section className="flex flex-col gap-2.5" {...props}>
       <header className="flex items-center gap-4">
         {position === "center" && <hr className="grow" />}
-        <h3 className="text-3xl font-thin text-muted-foreground">{title}</h3>
-        <hr className="grow" />
+        {title && (
+          <>
+            <h3 className="text-3xl font-thin text-muted-foreground/70">
+              {title}
+            </h3>
+            <hr className="grow" />
+          </>
+        )}
       </header>
       {props.children}
     </section>

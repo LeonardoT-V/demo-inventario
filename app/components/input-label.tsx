@@ -24,8 +24,8 @@ export default function InputLabel({
 
   return (
     <div className="w-full  space-y-0.5">
-      <Label htmlFor={label} className="text-xs capitalize">
-        {label} {isRequired && <span className="text-destructive">*</span>}
+      <Label label={label} isRequired={isRequired}>
+        {label}
       </Label>
       <InputComponent
         id={label}

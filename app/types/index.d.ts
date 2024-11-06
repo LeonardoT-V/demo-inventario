@@ -72,6 +72,7 @@ export interface Cambio extends StrapiDefaultResponse {
   articulo: Articulo;
   comentario: string;
   prev_value?: string;
+  new_value?: string;
   prev_carrera?: string;
   llave: string;
 }

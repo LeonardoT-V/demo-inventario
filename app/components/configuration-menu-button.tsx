@@ -8,11 +8,20 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "./ui/button";
-import { IconConfig, IconMoon, IconSun } from "@/lib/icons";
+import {
+  IconConfig,
+  IconLogout,
+  IconMoon,
+  IconSun,
+  IconUniversity,
+} from "@/lib/icons";
 import { Theme, useTheme } from "remix-themes";
+import { useNavigate } from "@remix-run/react";
+import { ROUTES_DIRECTION } from "@/lib/routes";
 
 function ConfigurationMenuButton() {
   const [theme, setTheme] = useTheme();
+  const navigate = useNavigate();
 
   const toogleTheme = () => {
     return theme === "light" ? setTheme(Theme.DARK) : setTheme(Theme.LIGHT);
@@ -26,20 +35,36 @@ function ConfigurationMenuButton() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
-        <DropdownMenuLabel>My Account</DropdownMenuLabel>
-        <DropdownMenuItem>Perfil</DropdownMenuItem>
+        {/* <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem>Profile</DropdownMenuItem>
-        <DropdownMenuItem>Billing</DropdownMenuItem>
-        <DropdownMenuItem>Team</DropdownMenuItem>
-        <DropdownMenuSeparator />
+        <DropdownMenuItem>Billing</DropdownMenuItem> */}
         <DropdownMenuDoubleCheckboxItem
           checked={theme === "dark"}
           onCheckedChange={toogleTheme}
           Icon={theme === "dark" ? IconSun : IconMoon}
         >
-          modo {theme === "dark" ? "claro" : "oscuro"}
+          Modo {theme === "dark" ? "claro" : "oscuro"}
         </DropdownMenuDoubleCheckboxItem>
+        <DropdownMenuItem
+          onClick={() => navigate(ROUTES_DIRECTION["select-place"].path)}
+        >
+          <span className="mr-2">
+            <IconUniversity />
+          </span>{" "}
+          Cambiar carrera
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <form action="/logout" method="post">
+          <button type="submit" className="w-full">
+            <DropdownMenuItem>
+              <span className="mr-2">
+                <IconLogout />
+              </span>{" "}
+              Cerrar Sesion
+            </DropdownMenuItem>
+          </button>
+        </form>
       </DropdownMenuContent>
     </DropdownMenu>
   );

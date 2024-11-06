@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader } from "./ui/card";
 import type { Articulo } from "@/types";
 import { IconDot, IconHome } from "@/lib/icons";
 import { FormatToDateIntl } from "@/lib/date";
+import ImageViewer from "./ui/image-viewer";
 
 export default function CardLinkArticle({ article }: { article: Articulo }) {
   const updateTime = FormatToDateIntl(article.createdAt);
@@ -15,8 +16,8 @@ export default function CardLinkArticle({ article }: { article: Articulo }) {
         asHover
       >
         <CardHeader className="p-2.5">
-          <img
-            src={article.url_img}
+          <ImageViewer
+            url_img={article.url_img}
             alt={`imagen de ${article.nombre}`}
             className="aspect-square h-44 rounded-lg object-contain"
           />
@@ -44,7 +45,7 @@ export default function CardLinkArticle({ article }: { article: Articulo }) {
               <span className="text-muted-foreground">{updateTime}</span>
             </span>
           </footer>
-          <ul className="rounded-lg border border-dashed bg-background p-1.5 px-3 transition-all group-hover:bg-primary/5">
+          <ul className="rounded-lg border bg-background p-1.5 px-3 transition-all group-hover:bg-primary/5">
             <h5 className="inline-flex items-center text-xs font-medium">
               <IconHome className="mr-1.5 size-3 text-primary" /> Ubicación
             </h5>

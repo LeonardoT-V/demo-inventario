@@ -14,19 +14,33 @@ import { createUserSession } from "@/services/user-cookie.server";
 import { LoginResponse } from "@/types";
 import { ActionFunctionArgs, json } from "@remix-run/node";
 import { Form } from "@remix-run/react";
-
+const STRAPI_URL_API = process.env.STRAPI_URL_API
 export async function action({ request }: ActionFunctionArgs) {
   try {
     const form = await request.clone().formData();
     const email = form.get("email");
     const password = form.get("password");
     console.log({ email, password });
+    // REGISTER
+    // const value = JSON.stringify({
+    //   username: "hola",
+    //   email,
+    //   password,
+    // });
+    // const hola = await fetch("http://localhost:1337/api/auth/local/register", {
+    //   body: value,
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   method: "POST",
+    // });
+    // LOGIN
+
     const value = JSON.stringify({
-      username: "hola",
-      email,
+      identifier: email,
       password,
     });
-    const hola = await fetch("http://localhost:1337/api/auth/local/register", {
+    const hola = await fetch(`${STRAPI_URL_API}/auth/local`, {
       body: value,
       headers: {
         "Content-Type": "application/json",

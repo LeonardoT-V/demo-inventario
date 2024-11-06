@@ -3,7 +3,7 @@ export const ROUTES = {
   inicio: { name: 'Inicio', path: '/', icon: IconHome },
   inventario: { name: 'Inventario', path: '/inventario', icon: IconArchive },
   "nuevo-registro": { name: 'Nuevo registro', path: '/nuevo-registro', icon: IconPlusCircle },
-  "movimientos": { name: 'Movimientos', path: '/movimientos', icon: IconMove }
+  // "movimientos": { name: 'Movimientos', path: '/movimientos', icon: IconMove }
 }
 
 export const ROUTES_DIRECTION = {
@@ -27,4 +27,5 @@ export const ACTIONS_ARTICLE = {
   DISABLE: 'disable-article',
   ACTIVE: 'active-article',
   EDIT: 'edit-article',
+  MOVE: 'move-article',
 }

@@ -1,6 +1,13 @@
 import QR from "react-qr-code";
 
-export default function QRCode({ value, ...props }: { value: string }) {
+export default function QRCode({
+  value,
+  title = "",
+  ...props
+}: {
+  value: string;
+  title?: string;
+}) {
   const onImageCownload = () => {
     const svg = document.getElementById("QRCode");
     const svgData = new XMLSerializer().serializeToString(svg!);
@@ -13,7 +20,7 @@ export default function QRCode({ value, ...props }: { value: string }) {
       ctx?.drawImage(img, 0, 0);
       const pngFile = canvas.toDataURL("image/png");
       const downloadLink = document.createElement("a");
-      downloadLink.download = "QRCode";
+      downloadLink.download = `QRCode ${title}`;
       downloadLink.href = `${pngFile}`;
       downloadLink.click();
     };

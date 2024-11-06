@@ -1,13 +1,14 @@
+import { fetcherToStrapi } from "@/lib/fetcher.server"
 import { setNewPagination } from "@/lib/pagination"
+import { getCareerLocationData } from "@/services/career-cookie.server"
 import { GetArticuloResponse, GetOneArticuloResponse } from "@/types"
 
-// const URL_BACKEND = 'http://localhost:1337'
-const URL_BACKEND_API = 'http://localhost:1337/api'
 
-export async function getArticleById(id: number | string): Promise<GetOneArticuloResponse> {
-  const res = await fetch(`${URL_BACKEND_API}/articulos/${id}?populate=*`)
-  const data = await res.json()
-  return data
+export async function getArticleById(id: number | string, request: Request) {
+  const res = await fetcherToStrapi<GetOneArticuloResponse>(
+    `/articulos/${id}?populate[mantenimientos][populate][0]=encargado&populate[registrado]=registrado&populate[carrera]=carrera&populate[cambios][populate][0]=responsable&populate[mantenimientos][sort][0]=createdAt%3Adesc&populate[cambios][sort][0]=createdAt%3Adesc`,
+    { request })
+  return res
 }
 
 
@@ -15,22 +16,16 @@ interface OptGetAllArticles {
   size?: number,
   actualPage?: number,
   search?: string,
-  order?: 'ASC' | 'DESC'
+  order?: 'asc' | 'desc'
 }
 
-export const getAllArticles = async ({ size = 1, actualPage = 1, search = '', order = 'ASC' }: OptGetAllArticles) => {
+export const getAllArticles = async ({ size = 1, actualPage = 1, search = '', order = 'desc' }: OptGetAllArticles, request: Request) => {
   try {
-    const entrySearch = search ? `&filters[nombre][$contains]=${search}&order=${order}` : ''
-    const res = await fetch(`${URL_BACKEND_API}/articulos?pagination[page]=${actualPage}&pagination[pageSize]=${size}${entrySearch}&populate=*`)
-    const data: GetArticuloResponse = await res.json()
-    if (!res.ok) {
-      return {
-        code: 500,
-        message: 'No se puede conectar con el servidor',
-        data: null,
-        meta: {}
-      }
-    }
+    const career = await getCareerLocationData(request)
+    const entrySearch = search ? `&filters[nombre][$containsi]=${search}` : ''
+    const data = await fetcherToStrapi<GetArticuloResponse>
+      (`/articulos?pagination[page]=${actualPage}&pagination[pageSize]=${size}${entrySearch}&populate=*&sort=id:${order}&filters[carrera][$eq]=${career?.career?.id}`,
+        { request })
     const pagination = setNewPagination(data.meta.pagination)
     return {
       data: data.data,
