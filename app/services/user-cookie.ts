@@ -1,8 +1,8 @@
 import { createCookieSessionStorage, redirect } from "@remix-run/node";
-import { Cookies_Name, Routes_Exclude } from "./session.server";
+import { Cookies_Name, Routes_Exclude } from "./session";
 import { LoginResponse } from "@/types";
 import { ROUTES_DIRECTION } from "@/lib/routes";
-import { deleteCareerData } from "./career-cookie.server";
+import { deleteCareerData } from "./career-cookie";
 
 const { commitSession, destroySession, getSession } = createCookieSessionStorage({
   cookie: {

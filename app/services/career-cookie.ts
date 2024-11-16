@@ -1,5 +1,5 @@
 import { createCookieSessionStorage, redirect } from "@remix-run/node";
-import { Cookies_Name, Routes_Exclude } from "./session.server";
+import { Cookies_Name, Routes_Exclude } from "./session";
 import { CareerLocation } from "@/types";
 import { ROUTES_DIRECTION } from "@/lib/routes";
 
