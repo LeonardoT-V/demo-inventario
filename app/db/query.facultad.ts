@@ -1,4 +1,4 @@
-import { fetcherToStrapi } from "@/lib/fetcher.server"
+import { fetcherToStrapi } from "@/lib/fetcher"
 import { Facultad } from "@/types"
 
 export const getAllFaculty = async (request: Request) => {

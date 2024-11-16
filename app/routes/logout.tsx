@@ -1,5 +1,5 @@
 import { ROUTES_DIRECTION } from "@/lib/routes";
-import { logout } from "@/services/user-cookie.server";
+import { logout } from "@/services/user-cookie";
 import { ActionFunctionArgs, redirect } from "@remix-run/node";
 
 export async function action({ request }: ActionFunctionArgs) {

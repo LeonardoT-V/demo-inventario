@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { getAllFaculty } from "@/db/query.facultad";
 import { IconUniversity } from "@/lib/icons";
 import { ROUTES_DIRECTION } from "@/lib/routes";
-import { createCareerLocationSession } from "@/services/career-cookie.server";
+import { createCareerLocationSession } from "@/services/career-cookie";
 import { CareerLocation } from "@/types";
 import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { json, useLoaderData, Form } from "@remix-run/react";

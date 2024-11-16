@@ -1,6 +1,6 @@
-import { fetcherToStrapi } from "@/lib/fetcher.server"
+import { fetcherToStrapi } from "@/lib/fetcher"
 import { setNewPagination } from "@/lib/pagination"
-import { getCareerLocationData } from "@/services/career-cookie.server"
+import { getCareerLocationData } from "@/services/career-cookie"
 import { GetArticuloResponse, GetOneArticuloResponse } from "@/types"
 
 
@@ -19,7 +19,7 @@ interface OptGetAllArticles {
   order?: 'asc' | 'desc'
 }
 
-export const getAllArticles = async ({ size = 1, actualPage = 1, search = '', order = 'desc' }: OptGetAllArticles, request: Request) => {
+export const getAllArticles = async ({ size = 20, actualPage = 1, search = '', order = 'desc' }: OptGetAllArticles, request: Request) => {
   try {
     const career = await getCareerLocationData(request)
     const entrySearch = search ? `&filters[nombre][$containsi]=${search}` : ''

@@ -12,19 +12,22 @@ import {
 import { getAllFaculty } from "@/db/query.facultad";
 import { registerNewMaintance } from "@/db/query.mantenimiento";
 import { TIPO_EDIT_ARTICLE } from "@/lib/const";
+import { FormartToExcelFile } from "@/lib/date";
+import {  cambiosIdSchema, mantenimientoIdSchema } from "@/lib/excel";
 import { IconReload } from "@/lib/icons";
 import { ROUTES, ACTIONS_MAINTANCE, ACTIONS_ARTICLE } from "@/lib/routes";
 import { renderToaster } from "@/lib/utils";
-import { requireCareerLocation } from "@/services/career-cookie.server";
+import { requireCareerLocation } from "@/services/career-cookie";
 import {
   ActionFunctionArgs,
   LoaderFunctionArgs,
   json,
   redirect,
 } from "@remix-run/node";
-import { useActionData, useLoaderData } from "@remix-run/react";
+import { ClientActionFunctionArgs, useActionData, useLoaderData } from "@remix-run/react";
 import { useEffect } from "react";
 import { ClientOnly } from "remix-utils/client-only";
+import writeXlsxFile from "write-excel-file";
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   await requireCareerLocation(request);
@@ -32,11 +35,28 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   if (articulo === null) {
     return redirect(ROUTES.inicio.path);
   }
-  return json({ article: articulo, facultades: await getAllFaculty(request) });
+  return json({ article: articulo, facultades: await getAllFaculty(request), apiUrl: process.env.STRAPI_URL_API });
 };
+
+export const clientAction = async ({request, params }: ClientActionFunctionArgs) => {
+  const values = await request.clone().formData();
+  const { _action,_apiUrl } = Object.fromEntries(values);
+  if(_action === "export_excel") {
+    const article = await fetch(`${_apiUrl}/articulos/${params.invId}?populate[mantenimientos][populate][0]=encargado&populate[cambios][populate][0]=responsable&pagination[pageSize]=100`)
+    const {data} = await article.json()
+    await writeXlsxFile([data.mantenimientos, data.cambios], {
+      fileName: `${data.nombre}(${data.id})-${FormartToExcelFile()}.xlsx`,
+      schema: [mantenimientoIdSchema, cambiosIdSchema],
+      sheets: [ 'Mantenimientos', 'Registros']
+    })
+    return null
+  }
+  return null
+}
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
   const values = await request.clone().formData();
+
   const { _action, ...data } = Object.fromEntries(values);
   if (_action === ACTIONS_MAINTANCE.REGISTER) {
     return await registerNewMaintance(
@@ -88,7 +108,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 };
 
 export default function ArticuloPage() {
-  const { article, facultades } = useLoaderData<typeof loader>();
+  const { article, facultades, apiUrl } = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
 
   useEffect(() => {
@@ -124,7 +144,7 @@ Codigo: ${article.id}`;
               </ClientOnly>
             </div>
           </aside>
-          <CardWithDetailsArticle article={article} facultades={facultades} />
+          <CardWithDetailsArticle apiUrl={apiUrl!} article={article} facultades={facultades} />
         </section>
       </SectionWithHeader>
       <SectionWithHeader title="Actualizaciones recientes">

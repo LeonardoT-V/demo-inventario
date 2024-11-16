@@ -10,7 +10,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ROUTES_DIRECTION } from "@/lib/routes";
-import { createUserSession } from "@/services/user-cookie.server";
+import { createUserSession } from "@/services/user-cookie";
 import { LoginResponse } from "@/types";
 import { ActionFunctionArgs, json } from "@remix-run/node";
 import { Form } from "@remix-run/react";
@@ -20,35 +20,19 @@ export async function action({ request }: ActionFunctionArgs) {
     const form = await request.clone().formData();
     const email = form.get("email");
     const password = form.get("password");
-    console.log({ email, password });
-    // REGISTER
-    // const value = JSON.stringify({
-    //   username: "hola",
-    //   email,
-    //   password,
-    // });
-    // const hola = await fetch("http://localhost:1337/api/auth/local/register", {
-    //   body: value,
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   method: "POST",
-    // });
-    // LOGIN
-
-    const value = JSON.stringify({
+    const formValue = JSON.stringify({
       identifier: email,
       password,
     });
-    const hola = await fetch(`${STRAPI_URL_API}/auth/local`, {
-      body: value,
+    const response = await fetch(`${STRAPI_URL_API}/auth/local`, {
+      body: formValue,
       headers: {
         "Content-Type": "application/json",
       },
       method: "POST",
     });
 
-    const { jwt, user, error }: LoginResponse = await hola.json();
+    const { jwt, user, error }: LoginResponse = await response.json();
     if (error) throw { [error.name]: error.message };
     return createUserSession(
       { jwt, user },

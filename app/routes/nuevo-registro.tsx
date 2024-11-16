@@ -12,8 +12,8 @@ import { createNewArticleEntry } from "@/db/query.nuevo-registro";
 import {
   getCareerLocationData,
   requireCareerLocation,
-} from "@/services/career-cookie.server";
-import { getUserData } from "@/services/user-cookie.server";
+} from "@/services/career-cookie";
+import { getUserData } from "@/services/user-cookie";
 
 import type {
   ActionFunctionArgs,

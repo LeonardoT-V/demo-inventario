@@ -1,6 +1,6 @@
 import { TIPO_EDIT_ARTICLE } from "@/lib/const";
-import { fetcherToStrapi } from "@/lib/fetcher.server";
-import { getUserData } from "@/services/user-cookie.server";
+import { fetcherToStrapi } from "@/lib/fetcher";
+import { getUserData } from "@/services/user-cookie";
 import { Articulo, Cambio, ReturnedMessage, TipoCambio } from "@/types";
 
 export async function updateValueArticle(

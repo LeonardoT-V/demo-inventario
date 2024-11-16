@@ -6,7 +6,7 @@ import paginationUtil from "@/lib/pagination";
 import Paginator from "@/components/Paginator";
 import InputSearchInventory from "@/components/inventario/input-search-inventory";
 import ListArticles from "@/components/inventario/list-articles";
-import { requireCareerLocation } from "@/services/career-cookie.server";
+import { requireCareerLocation } from "@/services/career-cookie";
 import GridContainer from "@/components/grid-container";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {

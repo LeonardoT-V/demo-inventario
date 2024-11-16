@@ -16,14 +16,14 @@ import {
   ThemeProvider,
   useTheme,
 } from "remix-themes";
-import { themeSessionResolver } from "@/services/session.server";
+import { themeSessionResolver } from "@/services/session";
 
 import style from "./main.css?url";
 import "@fontsource-variable/onest";
 import clsx from "clsx";
 import WithNavLayout from "./components/layouts/with-nav";
-import { getCareerLocationData } from "./services/career-cookie.server";
-import { requireUser } from "./services/user-cookie.server";
+import { getCareerLocationData } from "./services/career-cookie";
+import { requireUser } from "./services/user-cookie";
 import { Toaster } from "./components/ui/sonner";
 
 export const links: LinksFunction = () => [{ rel: "stylesheet", href: style }];

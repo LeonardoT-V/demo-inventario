@@ -29,3 +29,8 @@ export function FormatToDateWithHour(date: string | Date): string {
   }).format(parseDate);
   return formatedDate
 }
+
+export function FormartToExcelFile(): string {
+  const actualDate = new Date();
+  return `${actualDate.getDate()}-${actualDate.getMonth() + 1}-${actualDate.getFullYear()}`
+}

@@ -1,4 +1,4 @@
-import { IconHome, IconArchive, IconPlusCircle, IconMove } from "./icons"
+import { IconHome, IconArchive, IconPlusCircle,  } from "./icons"
 export const ROUTES = {
   inicio: { name: 'Inicio', path: '/', icon: IconHome },
   inventario: { name: 'Inventario', path: '/inventario', icon: IconArchive },

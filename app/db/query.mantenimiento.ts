@@ -1,5 +1,5 @@
-import { fetcherToStrapi } from "@/lib/fetcher.server";
-import { getUserData } from "@/services/user-cookie.server";
+import { fetcherToStrapi } from "@/lib/fetcher";
+import { getUserData } from "@/services/user-cookie";
 import { Mantenimiento, ReturnedMessage } from "@/types";
 
 

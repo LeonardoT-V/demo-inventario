@@ -8,12 +8,17 @@ import DisableArticleAction from "./actions/disable-article";
 import ActiveArticleAction from "./actions/active-article";
 import EditArticleInputAction from "./actions/editable-article-input";
 import TransportArticleAction from "./actions/transport-article";
+import { Form } from "@remix-run/react";
+import { Button } from "./ui";
+import { IconExcel } from "@/lib/icons";
 export default function CardWithDetailsArticle({
   article,
   facultades,
+  apiUrl
 }: {
   article: Articulo;
   facultades: Facultad[];
+  apiUrl: string
 }) {
   const registered = FormatToDateIntl(article.createdAt);
   const updatedAt = FormatToDateIntl(article.updatedAt);
@@ -45,6 +50,15 @@ export default function CardWithDetailsArticle({
             ) : (
               <ActiveArticleAction />
             )}
+            <Form
+              method="post"
+            >
+              <Button className="w-full" type="submit" icon={<IconExcel className="mr-1.5"/>}>
+              <input type="hidden" name="_action" value="export_excel" />
+              <input type="hidden" name="_apiUrl" value={apiUrl} />
+              Exportar a excel
+            </Button>
+          </Form>
           </div>
         </footer>
       </CardHeader>
