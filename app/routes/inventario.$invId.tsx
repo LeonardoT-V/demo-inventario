@@ -47,7 +47,7 @@ export const clientAction = async ({request, params }: ClientActionFunctionArgs)
     await writeXlsxFile([data.mantenimientos, data.cambios], {
       fileName: `${data.nombre}(${data.id})-${FormartToExcelFile()}.xlsx`,
       schema: [mantenimientoIdSchema, cambiosIdSchema],
-      sheets: [ 'Mantenimientos', 'Registros']
+      sheets: ['Mantenimientos', 'Registros']
     })
     return null
   }
