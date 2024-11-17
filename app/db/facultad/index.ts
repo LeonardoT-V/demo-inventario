@@ -2,7 +2,8 @@
 
 import { Facultad } from "@/types"
 
-const URL_BACKEND_API = 'http://localhost:1337/api'
+const URL_BACKEND_API = process.env.STRAPI_URL_API
+
 
 export const getAllFaculty = async (): Promise<Facultad[]> => {
   const res = await fetch(`${URL_BACKEND_API}/facultades?populate=*`)
