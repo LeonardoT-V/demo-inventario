@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { fetcherToStrapi } from "@/lib/fetcher";
 import { ROUTES_DIRECTION } from "@/lib/routes";
 import { createUserSession } from "@/services/user-cookie";
 import { LoginResponse } from "@/types";
@@ -34,8 +35,18 @@ export async function action({ request }: ActionFunctionArgs) {
 
     const { jwt, user, error }: LoginResponse = await response.json();
     if (error) throw { [error.name]: error.message };
+
+    const userRoleRes = await fetch(`${STRAPI_URL_API}/users/me?populate=role`, {
+      headers: {
+        "Content-Type": "application/json",
+        'Authorization': `Bearer ${jwt}`,
+      }
+    });
+
+    const userRole =await userRoleRes.json()
+
     return createUserSession(
-      { jwt, user },
+      { jwt, user:{...user, role: userRole.role! } },
       ROUTES_DIRECTION["select-place"].path
     );
   } catch (error) {
@@ -54,12 +65,11 @@ export default function login() {
             alt="foto de la universidad uleam"
           />
           <CardTitle className="text-2xl">Iniciar Sesión</CardTitle>
-          <CardDescription>Sistema de inventario ...</CardDescription>
         </CardHeader>
         <CardContent>
           <Form method="post" className="grid w-full items-center gap-4">
             <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="email">Email:</Label>
+              <Label isRequired htmlFor="email">Email:</Label>
               <Input
                 id="email"
                 type="email"
@@ -68,7 +78,7 @@ export default function login() {
               />
             </div>
             <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="password">Contraseña:</Label>
+              <Label isRequired htmlFor="password">Contraseña:</Label>
               <Input
                 id="password"
                 type="password"

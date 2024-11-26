@@ -1,15 +1,31 @@
-const URL_BACKEND_API = process.env.STRAPI_URL_API
+import { fetcherToStrapi } from "@/lib/fetcher";
+import { uploadImage } from "./upload-image";
+import { getUserData } from "@/services/user-cookie";
+import { getCareerLocationData } from "@/services/career-cookie";
+import { Articulo } from "@/types";
 
-export async function createNewArticleEntry(data, jwt) {
-  // TODO: implementar el fetcher
-  const res = await fetch(`${URL_BACKEND_API}/articulos/`, {
-    method: 'POST',
-    body: JSON.stringify({ data }),
-    headers: {
-      'Authorization': `Bearer ${jwt}`,
-      "Content-Type": "application/json",
-    }
-  })
-  const entryRegistred = await res.json()
-  return entryRegistred
+export async function createNewArticleEntry(data, request: Request) {
+  const user = await getUserData(request);
+  const location = await getCareerLocationData(request);
+
+  const imageResponse = await uploadImage(data.image, user!.jwt!);
+  const newImageId = imageResponse[0]?.id || null;
+
+  const parsedData = {
+    nombre: data.nombre,
+    descripcion: data.descripcion,
+    condicion: data.condicion,
+    aula: data.aula,
+    carrera: location?.career?.id,
+    registrado: user?.user?.id,
+    image: newImageId,
+  };
+
+  const response = await fetcherToStrapi<{ data: Articulo }>(`/articulos`, {
+    request,
+    body: parsedData,
+    method: "post",
+  });
+
+  return response;
 }

@@ -5,9 +5,10 @@ import NullContainer from "../null-container";
 
 interface ListArticlesProps {
   articulos?: Articulo[] | null;
+  strapi_url?: string;
 }
 
-export default function ListArticles({ articulos }: ListArticlesProps) {
+export default function ListArticles({ articulos, strapi_url }: ListArticlesProps) {
   if (articulos === null || articulos === undefined) {
     return (
       <NullContainer
@@ -27,6 +28,6 @@ export default function ListArticles({ articulos }: ListArticlesProps) {
     );
   }
   return articulos.map((article) => (
-    <CardLinkArticle article={article} key={article.id} />
+    <CardLinkArticle article={article} key={article.id} strapi_url={strapi_url}/>
   ));
 }

@@ -11,14 +11,17 @@ import TransportArticleAction from "./actions/transport-article";
 import { Form } from "@remix-run/react";
 import { Button } from "./ui";
 import { IconExcel } from "@/lib/icons";
+
 export default function CardWithDetailsArticle({
   article,
   facultades,
-  apiUrl
+  apiUrl,
+  is_supervisor
 }: {
   article: Articulo;
   facultades: Facultad[];
-  apiUrl: string
+  apiUrl: string;
+  is_supervisor?: boolean
 }) {
   const registered = FormatToDateIntl(article.createdAt);
   const updatedAt = FormatToDateIntl(article.updatedAt);
@@ -26,34 +29,45 @@ export default function CardWithDetailsArticle({
   return (
     <Card className="flex-1 border-none bg-transparent">
       <CardHeader>
-        <header className="mb-4">
-          <EditArticleInputAction
-            size="4xl"
-            llave="nombre"
-            value={article.nombre}
-          />
-          <EditArticleInputAction
+        <header className="mb-4 flex flex-col gap-2.5">
+          {is_supervisor ? <EditArticleInputAction
+              size="4xl"
+              llave="nombre"
+              value={article.nombre}
+            /> : <ContentLabelWithText
+              size="4xl"
+              title=""
+              description={article.nombre}
+          />}
+          {is_supervisor ?  <EditArticleInputAction
             size="xl"
             llave="descripcion"
             value={article.descripcion}
-          />
+            /> : <ContentLabelWithText
+            size="xl"
+            title="Descripción:"
+            description={article.descripcion}
+          />}
+
         </header>
         <footer className="flex items-center justify-between">
           <div className="flex flex-wrap justify-center gap-1.5 lg:justify-normal">
-            <TransportArticleAction
+            {is_supervisor && <TransportArticleAction
               articulo={article}
               facultades={facultades}
-            />
-            <CreateMaintanceAction />
-            {article.habilitado ? (
+            />}
+
+            {is_supervisor && <CreateMaintanceAction />}
+            {is_supervisor ? article.habilitado ? (
               <DisableArticleAction />
             ) : (
               <ActiveArticleAction />
-            )}
+            ) :null}
+
             <Form
               method="post"
             >
-              <Button className="w-full" type="submit" icon={<IconExcel className="mr-1.5"/>}>
+              <Button className="w-full bg-emerald-600" type="submit" icon={<IconExcel className="mr-1.5"/>} >
               <input type="hidden" name="_action" value="export_excel" />
               <input type="hidden" name="_apiUrl" value={apiUrl} />
               Exportar a excel
@@ -69,11 +83,16 @@ export default function CardWithDetailsArticle({
               title="Registrado por:"
               description={article?.registrado?.email}
             />
-            <EditArticleInputAction
+            {is_supervisor ? <EditArticleInputAction
               llave="condicion"
-              label="Estado del articulo"
+              label="Estado del articulo:"
               value={article.condicion}
-            />
+            /> :
+            <ContentLabelWithText
+            title="Estado del articulo:"
+            description={article.condicion}
+          /> }
+
             <ContentLabelWithText
               title="Registrado el:"
               description={registered}
@@ -90,11 +109,18 @@ export default function CardWithDetailsArticle({
               title="Carrera:"
               description={article.carrera.nombre}
             />
-            <EditArticleInputAction
-              llave="aula"
-              label="Aula:"
-              value={article.aula}
-            />
+
+            {is_supervisor ?
+              <EditArticleInputAction
+                llave="aula"
+                label="Aula:"
+                value={article.aula}
+              /> :
+              <ContentLabelWithText
+                title="Aula:"
+                description={article.aula}
+              />
+            }
           </div>
         </SectionWithHeader>
       </CardContent>

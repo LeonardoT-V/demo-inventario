@@ -30,12 +30,14 @@ import { ClientOnly } from "remix-utils/client-only";
 import writeXlsxFile from "write-excel-file";
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
-  await requireCareerLocation(request);
+  const careerCookie = await requireCareerLocation(request);
+
+  const userRole = careerCookie?.career?.is_supervisor ?? false
   const { data: articulo } = await getArticleById(params.invId!, request);
   if (articulo === null) {
     return redirect(ROUTES.inicio.path);
   }
-  return json({ article: articulo, facultades: await getAllFaculty(request), apiUrl: process.env.STRAPI_URL_API });
+  return json({ userRole: userRole,article: articulo, facultades: await getAllFaculty(request), apiUrl: process.env.STRAPI_URL_API, strapi_url: process.env.STRAPI_URL });
 };
 
 export const clientAction = async ({request, params }: ClientActionFunctionArgs) => {
@@ -108,7 +110,8 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 };
 
 export default function ArticuloPage() {
-  const { article, facultades, apiUrl } = useLoaderData<typeof loader>();
+
+  const { article, facultades, apiUrl, userRole, strapi_url } = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
 
   useEffect(() => {
@@ -121,18 +124,15 @@ export default function ArticuloPage() {
     }
   }, [actionData]);
 
-  const qrvalue = `Nombre:${article.nombre}
-Creado el: ${article.createdAt}
-Registrado por: ${article.registrado.email}
-Ubicación: ${article.carrera.nombre}
-Codigo: ${article.id}`;
+  const url_image =  article?.image?.url ? `${strapi_url}${article?.image?.url}` : undefined
+
   return (
     <>
       <SectionWithHeader>
         <section className="flex flex-col gap-4 lg:flex-row">
           <aside className="flex flex-row space-y-8 lg:flex-col">
             <ImageViewer
-              url_img={article.url_img}
+              url_img={url_image}
               alt={`fotografia del articulo ${article.nombre}`}
               className="aspect-square size-72 rounded-lg object-cover 2xl:size-96"
             />
@@ -140,11 +140,11 @@ Codigo: ${article.id}`;
               <ClientOnly
                 fallback={<IconReload className="size-12 animate-spin" />}
               >
-                {() => <QRCode value={qrvalue} title={article.nombre} />}
+                {() => <QRCode value={article} title={article.nombre} />}
               </ClientOnly>
             </div>
           </aside>
-          <CardWithDetailsArticle apiUrl={apiUrl!} article={article} facultades={facultades} />
+          <CardWithDetailsArticle is_supervisor={userRole} apiUrl={apiUrl!} article={article} facultades={facultades} />
         </section>
       </SectionWithHeader>
       <SectionWithHeader title="Actualizaciones recientes">

@@ -1,5 +1,5 @@
 import paginationUtil from "@/lib/pagination";
-import { TIPO_EDIT_ARTICLE } from '@/lib/const'
+import { TIPO_EDIT_ARTICLE } from "@/lib/const";
 
 export interface GetArticuloResponse {
   data: Articulo[];
@@ -7,16 +7,16 @@ export interface GetArticuloResponse {
 }
 
 export interface ErrorMsg {
-  status: string,
-  name: string,
-  message: string,
-  details: Error
+  status: string;
+  name: string;
+  message: string;
+  details: Error;
 }
 
 export interface GetOneArticuloResponse {
   data: Articulo;
   meta: Meta;
-  error: ErrorMsg
+  error: ErrorMsg;
 }
 
 export interface Articulo extends StrapiDefaultResponse {
@@ -33,14 +33,43 @@ export interface Articulo extends StrapiDefaultResponse {
   carrera: Carrera;
   mantenimientos: Mantenimiento[];
   cambios: Cambio[];
+  image: Image;
+}
+
+export interface Image extends StrapiDefaultResponse {
+  id: number;
+  name: string;
+  alternativeText: null;
+  caption: null;
+  width: number;
+  height: number;
+  formats: {
+    thumbnail: {
+      ext: string;
+      url: string;
+      hash: string;
+      mime: string;
+      name: string;
+      path: null;
+      size: number;
+      width: number;
+      height: number;
+      sizeInBytes: number;
+    };
+  };
+  hash: string;
+  ext: string;
+  mime: string;
+  size: number;
+  url: string;
 }
 
 export interface Mantenimiento extends StrapiDefaultResponse {
-  tipo: string
-  comentario?: string
-  encargado: Profile
-  detalle: string
-  articulo: Articulo
+  tipo: string;
+  comentario?: string;
+  encargado: Profile;
+  detalle: string;
+  articulo: Articulo;
 }
 
 export interface Registro extends StrapiDefaultResponse {
@@ -77,8 +106,8 @@ export interface Cambio extends StrapiDefaultResponse {
   llave: string;
 }
 
-export type TipoCambioKey = keyof typeof TIPO_EDIT_ARTICLE
-export type TipoCambio = typeof TIPO_EDIT_ARTICLE[TipoCambioKey]
+export type TipoCambioKey = keyof typeof TIPO_EDIT_ARTICLE;
+export type TipoCambio = (typeof TIPO_EDIT_ARTICLE)[TipoCambioKey];
 
 export interface Facultad extends StrapiDefaultResponse {
   id: number;
@@ -91,7 +120,7 @@ export interface Facultad extends StrapiDefaultResponse {
 
 export interface TipoMovimiento extends StrapiDefaultResponse {
   id: number;
-  nombre: string
+  nombre: string;
   registros: Registro[];
 }
 export interface StrapiDefaultResponse {
@@ -113,16 +142,16 @@ export interface MetaPagination {
   total: number;
 }
 export interface Pagination {
-  next?: number,
-  prev?: number,
-  total?: number,
-  isFirt?: boolean,
-  isLast?: boolean,
-  actualPage?: number
-  itemPerPage?: number,
+  next?: number;
+  prev?: number;
+  total?: number;
+  isFirt?: boolean;
+  isLast?: boolean;
+  actualPage?: number;
+  itemPerPage?: number;
 }
 
-export type ParamsPagination = ReturnType<typeof paginationUtil>
+export type ParamsPagination = ReturnType<typeof paginationUtil>;
 
 export type LoginResponse = ErrorResponse & {
   jwt?: string;
@@ -137,12 +166,14 @@ export type ErrorResponse = {
     message: string;
     details: object;
   };
-}
-export type LoginErrorResponse = {
-  identifier?: string
-  password?: string
-  ValidationError?: string
-} | unknown
+};
+export type LoginErrorResponse =
+  | {
+      identifier?: string;
+      password?: string;
+      ValidationError?: string;
+    }
+  | unknown;
 
 export type Profile = {
   id?: number;
@@ -153,16 +184,24 @@ export type Profile = {
   blocked?: boolean;
   createdAt?: string | undefined;
   updatedAt?: string | undefined;
+  role?: {
+    name: string;
+    description: string;
+    type: string;
+    id: number;
+    createdAt: string;
+    updatedAt: string;
+    publishedAt: string;
+  };
 };
-
 
 export type CareerLocation = {
   faculty?: Facultad;
-  career?: Carrera;
-}
+  career?: Carrera & { is_supervisor: boolean };
+};
 
 interface ReturnedMessage {
   detail: string;
   message: string;
-  type?: 'default' | 'error' | 'success' | 'info'
+  type?: "default" | "error" | "success" | "info";
 }

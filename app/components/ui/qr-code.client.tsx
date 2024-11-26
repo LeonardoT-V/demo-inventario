@@ -5,9 +5,16 @@ export default function QRCode({
   title = "",
   ...props
 }: {
-  value: string;
+  value: any;
   title?: string;
 }) {
+
+  const qrvalue = `Nombre:${value.nombre}
+  Creado el: ${value.createdAt}
+  Registrado por: ${value.registrado.email}
+  Ubicación: ${value.carrera.nombre}
+  Codigo: ${value.id}`;
+
   const onImageCownload = () => {
     const svg = document.getElementById("QRCode");
     const svgData = new XMLSerializer().serializeToString(svg!);
@@ -37,7 +44,7 @@ export default function QRCode({
       </button>
       <QR
         id="QRCode"
-        value={value}
+        value={qrvalue}
         {...props}
         className="size-full transition-all group-hover:blur-sm"
       />

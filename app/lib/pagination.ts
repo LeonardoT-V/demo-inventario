@@ -4,10 +4,12 @@ export default function paginationUtil(url: URL) {
   const actualPage = Number(url.searchParams.get("page") ? url.searchParams.get("page") : 1);
   const searchParam = url.searchParams.get("search") ?? '';
   const sizeParam = Number(url.searchParams.get("size") ? url.searchParams.get("size") : 25);
+  const subarea = url.searchParams.get("subarea") ?? '';
   return {
     actualPage,
     searchParam,
-    sizeParam
+    sizeParam,
+    subarea
   }
 }
 

@@ -2,7 +2,7 @@ import SelectCareer from "@/components/pages/select-place/select-career";
 import SectionWithHeader from "@/components/section-header";
 import { Button } from "@/components/ui";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { getAllFaculty } from "@/db/query.facultad";
+import {  getFacultyByUser } from "@/db/query.facultad";
 import { IconUniversity } from "@/lib/icons";
 import { ROUTES_DIRECTION } from "@/lib/routes";
 import { createCareerLocationSession } from "@/services/career-cookie";
@@ -12,13 +12,12 @@ import { json, useLoaderData, Form } from "@remix-run/react";
 import { useState } from "react";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  return json({ faculties: await getAllFaculty(request) });
+  return json({ faculties: await getFacultyByUser(request) });
 };
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const { data } = Object.fromEntries(await request.formData());
   const form: CareerLocation = await JSON.parse(data.toString());
-  console.log(form);
   return createCareerLocationSession(
     { career: form.career, faculty: form.faculty },
     ROUTES_DIRECTION["inicio"].path

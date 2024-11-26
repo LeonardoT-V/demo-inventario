@@ -11,6 +11,7 @@ export default function FormRegisterElement({
 }) {
   return (
     <Form
+      encType="multipart/form-data"
       action="/nuevo-registro"
       method="post"
       className="grid grid-cols-2 gap-2.5 gap-x-8"
@@ -25,6 +26,7 @@ export default function FormRegisterElement({
             label="nombre"
             placeholder="Nombre del articulo"
           />
+
           <InputLabel
             label="descripcion"
             placeholder="Descripción del articulo"
@@ -47,7 +49,7 @@ export default function FormRegisterElement({
           <IconImage className="mr-1.5 size-4" /> Fotografía
         </h5>
         <div className="space-y-2 ">
-          <InputLabel label="imagen" placeholder="Ingrese URL de imagen" />
+          <InputLabel label="image" placeholder="Ingrese la imagen" type="file" accept="image/*"/>
         </div>
       </section>
       <section>

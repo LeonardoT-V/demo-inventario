@@ -63,8 +63,8 @@ export default function NavLink({ to, name, Icon }: NavLinkProps) {
 export interface LinkProps
   extends RemixLinkProps,
     VariantProps<typeof linkVariants> {
-  name: string;
-  Icon: any;
+  name?: string;
+  Icon?: any;
 }
 
 export function Link({ to, variant, size, className, ...props }: LinkProps) {
