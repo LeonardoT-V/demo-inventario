@@ -37,7 +37,7 @@ export const getAllArticles = async (
       : "";
 
     const data = await fetcherToStrapi<GetArticuloResponse>(
-      `/articulos?pagination[page]=${actualPage}&pagination[pageSize]=${size}${entrySearch}&populate=*&sort=id:${order}&filters[carrera][$eq]=${career?.career?.id}${subareaSearch}`,
+      `/articulos?pagination[page]=${actualPage}&pagination[pageSize]=${size}${entrySearch}&populate=*&sort=id:${order}&filters[carrera][$eq]=${career?.career?.id}${subareaSearch}&filters[habilitado][$eq]=true`,
       { request }
     );
     const pagination = setNewPagination(data.meta.pagination);

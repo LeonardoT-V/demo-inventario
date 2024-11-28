@@ -3,18 +3,16 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { fetcherToStrapi } from "@/lib/fetcher";
 import { ROUTES_DIRECTION } from "@/lib/routes";
 import { createUserSession } from "@/services/user-cookie";
 import { LoginResponse } from "@/types";
 import { ActionFunctionArgs, json } from "@remix-run/node";
-import { Form } from "@remix-run/react";
+import { Form, useActionData } from "@remix-run/react";
 const STRAPI_URL_API = process.env.STRAPI_URL_API
 export async function action({ request }: ActionFunctionArgs) {
   try {
@@ -34,8 +32,7 @@ export async function action({ request }: ActionFunctionArgs) {
     });
 
     const { jwt, user, error }: LoginResponse = await response.json();
-    if (error) throw { [error.name]: error.message };
-
+    if (error) throw  error.message;
     const userRoleRes = await fetch(`${STRAPI_URL_API}/users/me?populate=role`, {
       headers: {
         "Content-Type": "application/json",
@@ -50,11 +47,13 @@ export async function action({ request }: ActionFunctionArgs) {
       ROUTES_DIRECTION["select-place"].path
     );
   } catch (error) {
-    return json(error);
+    return json({error});
   }
 }
 
 export default function login() {
+  const actionData = useActionData<typeof action>();
+
   return (
     <main className="bb relative flex size-full items-center justify-center align-middle">
       <Card className="w-96">
@@ -65,11 +64,12 @@ export default function login() {
             alt="foto de la universidad uleam"
           />
           <CardTitle className="text-2xl">Iniciar Sesión</CardTitle>
+          <CardDescription>Ingrese sus credenciales de acceso.</CardDescription>
         </CardHeader>
         <CardContent>
           <Form method="post" className="grid w-full items-center gap-4">
             <div className="flex flex-col space-y-1.5">
-              <Label isRequired htmlFor="email">Email:</Label>
+              <Label isRequired htmlFor="email" label="Email:"/>
               <Input
                 id="email"
                 type="email"
@@ -78,7 +78,7 @@ export default function login() {
               />
             </div>
             <div className="flex flex-col space-y-1.5">
-              <Label isRequired htmlFor="password">Contraseña:</Label>
+              <Label label="Contraseña:" isRequired htmlFor="password"/>
               <Input
                 id="password"
                 type="password"
@@ -86,22 +86,13 @@ export default function login() {
                 placeholder="********"
               />
             </div>
+            <p className="text-center text-xs text-destructive">{actionData?.error}</p>
             <Button type="submit" className="w-full">
               Entrar
             </Button>
           </Form>
-        </CardContent>
-        <CardContent className="flex items-center gap-4 text-center text-lg">
-          <hr className="grow" />
-          <span>o</span>
-          <hr className="grow" />
-        </CardContent>
 
-        <CardFooter className="flex justify-center text-center">
-          <p className="text-center text-xs text-primary underline">
-            Registra tu cuenta aquí
-          </p>
-        </CardFooter>
+        </CardContent>
       </Card>
     </main>
   );

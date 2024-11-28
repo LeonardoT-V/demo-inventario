@@ -14,11 +14,12 @@ const Label = React.forwardRef<
     VariantProps<typeof labelVariants> & {
       label: string;
       isRequired?: boolean;
+      htmlFor?: string;
     }
->(({ className, label, isRequired = false, ...props }, ref) => (
+>(({ className, label, htmlFor = undefined, isRequired = false, ...props }, ref) => (
   <LabelPrimitive.Root
     ref={ref}
-    htmlFor={label}
+    htmlFor={htmlFor ? htmlFor : label}
     className={cn(labelVariants(), className)}
     {...props}
   >

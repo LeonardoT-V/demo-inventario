@@ -24,7 +24,7 @@ import {
   json,
   redirect,
 } from "@remix-run/node";
-import { ClientActionFunctionArgs, useActionData, useLoaderData } from "@remix-run/react";
+import {ClientActionFunctionArgs, useActionData, useLoaderData } from "@remix-run/react";
 import { useEffect } from "react";
 import { ClientOnly } from "remix-utils/client-only";
 import writeXlsxFile from "write-excel-file";
@@ -40,7 +40,9 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   return json({ userRole: userRole,article: articulo, facultades: await getAllFaculty(request), apiUrl: process.env.STRAPI_URL_API, strapi_url: process.env.STRAPI_URL });
 };
 
-export const clientAction = async ({request, params }: ClientActionFunctionArgs) => {
+export const clientAction = async ({request, params,serverAction }: ClientActionFunctionArgs) => {
+
+
   const values = await request.clone().formData();
   const { _action,_apiUrl } = Object.fromEntries(values);
   if(_action === "export_excel") {
@@ -53,7 +55,8 @@ export const clientAction = async ({request, params }: ClientActionFunctionArgs)
     })
     return null
   }
-  return null
+
+  return await serverAction()
 }
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
@@ -106,7 +109,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     }
     return redirect(ROUTES.inventario.path);
   }
-  return undefined;
+  return null;
 };
 
 export default function ArticuloPage() {

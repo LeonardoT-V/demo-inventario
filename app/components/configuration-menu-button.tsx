@@ -3,7 +3,6 @@ import {
   DropdownMenuContent,
   DropdownMenuDoubleCheckboxItem,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
@@ -35,10 +34,12 @@ function ConfigurationMenuButton() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
-        {/* <DropdownMenuLabel>My Account</DropdownMenuLabel>
+        <DropdownMenuItem
+          onClick={() => navigate(ROUTES_DIRECTION["profile"].path)}
+        >
+          Tu perfil
+        </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>Profile</DropdownMenuItem>
-        <DropdownMenuItem>Billing</DropdownMenuItem> */}
         <DropdownMenuDoubleCheckboxItem
           checked={theme === "dark"}
           onCheckedChange={toogleTheme}

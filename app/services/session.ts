@@ -1,14 +1,14 @@
-import { ROUTES_DIRECTION } from "@/lib/routes"
-import { createCookieSessionStorage } from "@remix-run/node"
-import { createThemeSessionResolver } from "remix-themes"
+import { ROUTES_DIRECTION } from "@/lib/routes";
+import { createCookieSessionStorage } from "@remix-run/node";
+import { createThemeSessionResolver } from "remix-themes";
 
 export const Cookies_Name = {
-  theme: 'theme',
-  user: 'user',
-  career: 'career',
-}
+  theme: "theme",
+  user: "user",
+  career: "career",
+};
 
-export const Routes_Exclude = [ROUTES_DIRECTION.login.path, ROUTES_DIRECTION.sigin.path]
+export const Routes_Exclude = [ROUTES_DIRECTION.login.path];
 
 // const isProduction = process.env.NODE_ENV === "production"
 
@@ -24,8 +24,6 @@ const themeStorage = createCookieSessionStorage({
     //   ? { domain: "your-production-domain.com", secure: true }
     //   : {}),
   },
-})
+});
 
-
-
-export const themeSessionResolver = createThemeSessionResolver(themeStorage)
+export const themeSessionResolver = createThemeSessionResolver(themeStorage);
