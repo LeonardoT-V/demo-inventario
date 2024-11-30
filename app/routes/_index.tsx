@@ -41,11 +41,11 @@ export const clientAction = async ({ request  }: ClientActionFunctionArgs) => {
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const careerLocation = await requireCareerLocation(request);
-  return json({subAreas: await searchArticlesInCarreer(request), articulos: await getAllArticles({ size: 4 }, request), carrera: careerLocation!.career, apiUrl: process.env.STRAPI_URL_API, strapi_url: process.env.STRAPI_URL });
+  return json({subAreas: await searchArticlesInCarreer(request), articulos: await getAllArticles({ size: 4 }, request), carrera: careerLocation!.career, apiUrl: process.env.STRAPI_URL_API });
 };
 
 export default function Index() {
-  const { articulos,carrera,apiUrl,subAreas,strapi_url } = useLoaderData<typeof loader>();
+  const { articulos,carrera,apiUrl,subAreas } = useLoaderData<typeof loader>();
   return (
     <>
       <SectionWithHeader title="Operaciones">
@@ -102,7 +102,7 @@ export default function Index() {
         <SectionWithHeader title="Añadidos Recientemente">
           <>
             <GridContainer>
-              <ListArticles articulos={articulos.data} strapi_url={strapi_url} />
+              <ListArticles articulos={articulos.data}/>
             </GridContainer>
             <Link className="mx-auto" to={ROUTES["inventario"].path}>
               <Button className="w-full lg:w-96">Ver Todos</Button>

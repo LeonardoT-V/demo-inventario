@@ -2,12 +2,19 @@ import InputLabel from "@/components/input-label";
 import { Button } from "@/components/ui";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { renderToaster } from "@/lib/utils";
+import { requireCareerLocation } from "@/services/career-cookie";
 import { getUserData } from "@/services/user-cookie";
-import { ActionFunctionArgs, json } from "@remix-run/node";
+import { ActionFunctionArgs, json, LoaderFunctionArgs } from "@remix-run/node";
 import { Form, useActionData } from "@remix-run/react";
 import { useEffect, useRef } from "react";
 
 const STRAPI_URL_API = process.env.STRAPI_URL_API;
+
+export const loader = async ({request}: LoaderFunctionArgs) => {
+  await requireCareerLocation(request);
+  return null
+}
+
 export const action = async ({request}: ActionFunctionArgs) => {
   const formData = await request.formData();
   const data = Object.fromEntries(formData);
@@ -38,7 +45,6 @@ export const action = async ({request}: ActionFunctionArgs) => {
     }
     return json({errors, data: null})
   }
-  console.log(dataResponse);
 
   return json({errors: null, data: {message: 'Contraseña actualizada'}})
 }

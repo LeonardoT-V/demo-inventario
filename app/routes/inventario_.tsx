@@ -15,7 +15,6 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   await requireCareerLocation(request);
   const requestParam = paginationUtil(new URL(request.url));
   return json({
-    strapi_url: process.env.STRAPI_URL,
     articulos: await getAllArticles(
       {
         size: requestParam.sizeParam,
@@ -30,7 +29,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 };
 
 export default function Inventario() {
-  const { articulos, params,strapi_url} = useLoaderData<typeof loader>();
+  const { articulos, params} = useLoaderData<typeof loader>();
 
   return (
     <>
@@ -45,7 +44,7 @@ export default function Inventario() {
           <InputSearchInventory />
         </header>
         <GridContainer>
-          <ListArticles articulos={articulos.data} strapi_url={strapi_url} />
+          <ListArticles articulos={articulos.data} />
         </GridContainer>
         <footer>
           <Paginator pagination={articulos.meta} params={params} />

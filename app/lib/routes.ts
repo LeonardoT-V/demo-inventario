@@ -34,4 +34,5 @@ export const ACTIONS_ARTICLE = {
   ACTIVE: "active-article",
   EDIT: "edit-article",
   MOVE: "move-article",
+  EDIT_IMAGE: "edit-image",
 };

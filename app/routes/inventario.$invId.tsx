@@ -8,16 +8,18 @@ import { getArticleById } from "@/db/query";
 import {
   editKeyValueArticle,
   moveArticleDirectory,
+  updateValueArticle,
 } from "@/db/query.articulos";
 import { getAllFaculty } from "@/db/query.facultad";
-import { registerNewMaintance } from "@/db/query.mantenimiento";
+import { deleteImage,  uploadImage } from "@/db/upload-image";
 import { TIPO_EDIT_ARTICLE } from "@/lib/const";
 import { FormartToExcelFile } from "@/lib/date";
 import {  cambiosIdSchema, mantenimientoIdSchema } from "@/lib/excel";
 import { IconReload } from "@/lib/icons";
-import { ROUTES, ACTIONS_MAINTANCE, ACTIONS_ARTICLE } from "@/lib/routes";
+import { ROUTES, ACTIONS_ARTICLE } from "@/lib/routes";
 import { renderToaster } from "@/lib/utils";
 import { requireCareerLocation } from "@/services/career-cookie";
+import { getUserData } from "@/services/user-cookie";
 import {
   ActionFunctionArgs,
   LoaderFunctionArgs,
@@ -63,22 +65,17 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
   const values = await request.clone().formData();
 
   const { _action, ...data } = Object.fromEntries(values);
-  if (_action === ACTIONS_MAINTANCE.REGISTER) {
-    return await registerNewMaintance(
-      { articulo: params.invId, ...data },
-      request
+
+  if (_action === ACTIONS_ARTICLE.EDIT_IMAGE) {
+    const user = await getUserData(request)
+    if(data.id_image) {
+      await deleteImage(data.id_image, user?.jwt)
+    }
+    const uploadResponse = await uploadImage(data.new_image, user!.jwt!)
+    return await updateValueArticle(
+      params.invId, {image: uploadResponse[0]?.id }, request
     );
-  }
-  if (_action === ACTIONS_ARTICLE.DISABLE) {
-    return await editKeyValueArticle(
-      params.invId,
-      {
-        habilitado: false,
-        tipo_register: TIPO_EDIT_ARTICLE.DISABLE,
-        ...data,
-      },
-      request
-    );
+
   }
   if (_action === ACTIONS_ARTICLE.ACTIVE) {
     return await editKeyValueArticle(
@@ -114,7 +111,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 
 export default function ArticuloPage() {
 
-  const { article, facultades, apiUrl, userRole, strapi_url } = useLoaderData<typeof loader>();
+  const { article, facultades, apiUrl, userRole } = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
 
   useEffect(() => {
@@ -127,18 +124,18 @@ export default function ArticuloPage() {
     }
   }, [actionData]);
 
-  const url_image =  article?.image?.url ? `${strapi_url}${article?.image?.url}` : undefined
+  const url_image =  article?.image?.url ? `${article?.image?.url}` : undefined
 
   return (
     <>
       <SectionWithHeader>
         <section className="flex flex-col gap-4 lg:flex-row">
           <aside className="flex flex-row space-y-8 lg:flex-col">
-            <ImageViewer
-              url_img={url_image}
-              alt={`fotografia del articulo ${article.nombre}`}
-              className="aspect-square size-72 rounded-lg object-cover 2xl:size-96"
-            />
+              <ImageViewer
+                url_img={url_image}
+                alt={`fotografia del articulo ${article.nombre}`}
+                className="z-0 aspect-square size-72 rounded-lg object-cover 2xl:size-96"
+              />
             <div className="mx-auto flex aspect-square size-60 items-center justify-center">
               <ClientOnly
                 fallback={<IconReload className="size-12 animate-spin" />}

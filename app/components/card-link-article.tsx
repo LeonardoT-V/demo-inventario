@@ -6,9 +6,9 @@ import { IconDot, IconHome } from "@/lib/icons";
 import { FormatToDateIntl } from "@/lib/date";
 import ImageViewer from "./ui/image-viewer";
 
-export default function CardLinkArticle({ article,strapi_url }: { article: Articulo,strapi_url?:string }) {
+export default function CardLinkArticle({ article }: { article: Articulo }) {
   const updateTime = FormatToDateIntl(article.createdAt);
-  const url_image =  article?.image?.url ? `${strapi_url}${article?.image?.url}` : undefined
+  const url_image =  article?.image?.url ? `${article?.image?.url}` : undefined
   return (
     <Link to={`${ROUTES["inventario"].path}/${article.id}`}>
       <Card

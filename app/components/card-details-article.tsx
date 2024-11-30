@@ -11,6 +11,7 @@ import TransportArticleAction from "./actions/transport-article";
 import { Form } from "@remix-run/react";
 import { Button } from "./ui";
 import { IconExcel } from "@/lib/icons";
+import ReplaceImageAction from "./actions/replace-image";
 
 export default function CardWithDetailsArticle({
   article,
@@ -30,6 +31,7 @@ export default function CardWithDetailsArticle({
     <Card className="flex-1 border-none bg-transparent">
       <CardHeader>
         <header className="mb-4 flex flex-col gap-2.5">
+
           {is_supervisor ? <EditArticleInputAction
               size="4xl"
               llave="nombre"
@@ -57,6 +59,7 @@ export default function CardWithDetailsArticle({
               facultades={facultades}
             />}
 
+            {is_supervisor && <ReplaceImageAction imageId={article?.image?.id} />}
             {is_supervisor && <CreateMaintanceAction />}
             {is_supervisor ? article.habilitado ? (
               <DisableArticleAction />

@@ -100,7 +100,7 @@ export default function TransportArticleAction({
           <DialogFooter>
             <DialogClose asChild>
               <Button type="button" variant="secondary">
-                asd Cancelar
+                Cancelar
               </Button>
             </DialogClose>
             <DialogClose asChild>
