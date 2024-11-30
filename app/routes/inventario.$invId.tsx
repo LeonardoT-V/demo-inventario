@@ -11,12 +11,13 @@ import {
   updateValueArticle,
 } from "@/db/query.articulos";
 import { getAllFaculty } from "@/db/query.facultad";
+import { registerNewMaintance } from "@/db/query.mantenimiento";
 import { deleteImage,  uploadImage } from "@/db/upload-image";
 import { TIPO_EDIT_ARTICLE } from "@/lib/const";
 import { FormartToExcelFile } from "@/lib/date";
 import {  cambiosIdSchema, mantenimientoIdSchema } from "@/lib/excel";
 import { IconReload } from "@/lib/icons";
-import { ROUTES, ACTIONS_ARTICLE } from "@/lib/routes";
+import { ROUTES, ACTIONS_ARTICLE, ACTIONS_MAINTANCE } from "@/lib/routes";
 import { renderToaster } from "@/lib/utils";
 import { requireCareerLocation } from "@/services/career-cookie";
 import { getUserData } from "@/services/user-cookie";
@@ -65,6 +66,23 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
   const values = await request.clone().formData();
 
   const { _action, ...data } = Object.fromEntries(values);
+  if (_action === ACTIONS_MAINTANCE.REGISTER) {
+    return await registerNewMaintance(
+      { articulo: params.invId, ...data },
+      request
+    );
+  }
+  if (_action === ACTIONS_ARTICLE.DISABLE) {
+    return await editKeyValueArticle(
+      params.invId,
+      {
+        habilitado: false,
+        tipo_register: TIPO_EDIT_ARTICLE.DISABLE,
+        ...data,
+      },
+      request
+    );
+  }
 
   if (_action === ACTIONS_ARTICLE.EDIT_IMAGE) {
     const user = await getUserData(request)
@@ -75,7 +93,6 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     return await updateValueArticle(
       params.invId, {image: uploadResponse[0]?.id }, request
     );
-
   }
   if (_action === ACTIONS_ARTICLE.ACTIVE) {
     return await editKeyValueArticle(
