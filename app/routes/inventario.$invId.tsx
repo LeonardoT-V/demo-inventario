@@ -12,10 +12,10 @@ import {
 } from "@/db/query.articulos";
 import { getAllFaculty } from "@/db/query.facultad";
 import { registerNewMaintance } from "@/db/query.mantenimiento";
-import { deleteImage,  uploadImage } from "@/db/upload-image";
+import { deleteImage, uploadImage } from "@/db/upload-image";
 import { TIPO_EDIT_ARTICLE } from "@/lib/const";
 import { FormartToExcelFile } from "@/lib/date";
-import {  cambiosIdSchema, mantenimientoIdSchema } from "@/lib/excel";
+import { cambiosIdSchema, mantenimientoIdSchema } from "@/lib/excel";
 import { IconReload } from "@/lib/icons";
 import { ROUTES, ACTIONS_ARTICLE, ACTIONS_MAINTANCE } from "@/lib/routes";
 import { renderToaster } from "@/lib/utils";
@@ -27,7 +27,11 @@ import {
   json,
   redirect,
 } from "@remix-run/node";
-import {ClientActionFunctionArgs, useActionData, useLoaderData } from "@remix-run/react";
+import {
+  ClientActionFunctionArgs,
+  useActionData,
+  useLoaderData,
+} from "@remix-run/react";
 import { useEffect } from "react";
 import { ClientOnly } from "remix-utils/client-only";
 import writeXlsxFile from "write-excel-file";
@@ -35,32 +39,42 @@ import writeXlsxFile from "write-excel-file";
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   const careerCookie = await requireCareerLocation(request);
 
-  const userRole = careerCookie?.career?.is_supervisor ?? false
+  const userRole = careerCookie?.career?.is_supervisor ?? false;
   const { data: articulo } = await getArticleById(params.invId!, request);
   if (articulo === null) {
     return redirect(ROUTES.inicio.path);
   }
-  return json({ userRole: userRole,article: articulo, facultades: await getAllFaculty(request), apiUrl: process.env.STRAPI_URL_API, strapi_url: process.env.STRAPI_URL });
+  return json({
+    userRole: userRole,
+    article: articulo,
+    facultades: await getAllFaculty(request),
+    apiUrl: process.env.STRAPI_URL_API,
+    strapi_url: process.env.STRAPI_URL,
+  });
 };
 
-export const clientAction = async ({request, params,serverAction }: ClientActionFunctionArgs) => {
-
-
+export const clientAction = async ({
+  request,
+  params,
+  serverAction,
+}: ClientActionFunctionArgs) => {
   const values = await request.clone().formData();
-  const { _action,_apiUrl } = Object.fromEntries(values);
-  if(_action === "export_excel") {
-    const article = await fetch(`${_apiUrl}/articulos/${params.invId}?populate[mantenimientos][populate][0]=encargado&populate[cambios][populate][0]=responsable&pagination[pageSize]=100`)
-    const {data} = await article.json()
+  const { _action, _apiUrl } = Object.fromEntries(values);
+  if (_action === "export_excel") {
+    const article = await fetch(
+      `${_apiUrl}/articulos/${params.invId}?populate[mantenimientos][populate][0]=encargado&populate[cambios][populate][0]=responsable&pagination[pageSize]=100`
+    );
+    const { data } = await article.json();
     await writeXlsxFile([data.mantenimientos, data.cambios], {
       fileName: `${data.nombre}(${data.id})-${FormartToExcelFile()}.xlsx`,
       schema: [mantenimientoIdSchema, cambiosIdSchema],
-      sheets: ['Mantenimientos', 'Registros']
-    })
-    return null
+      sheets: ["Mantenimientos", "Registros"],
+    });
+    return null;
   }
 
-  return await serverAction()
-}
+  return await serverAction();
+};
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
   const values = await request.clone().formData();
@@ -85,13 +99,15 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
   }
 
   if (_action === ACTIONS_ARTICLE.EDIT_IMAGE) {
-    const user = await getUserData(request)
-    if(data.id_image) {
-      await deleteImage(data.id_image, user?.jwt)
+    const user = await getUserData(request);
+    if (data.id_image) {
+      await deleteImage(data.id_image, user?.jwt);
     }
-    const uploadResponse = await uploadImage(data.new_image, user!.jwt!)
+    const uploadResponse = await uploadImage(data.new_image, user!.jwt!);
     return await updateValueArticle(
-      params.invId, {image: uploadResponse[0]?.id }, request
+      params.invId,
+      { image: uploadResponse[0]?.id },
+      request
     );
   }
   if (_action === ACTIONS_ARTICLE.ACTIVE) {
@@ -127,8 +143,8 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 };
 
 export default function ArticuloPage() {
-
-  const { article, facultades, apiUrl, userRole } = useLoaderData<typeof loader>();
+  const { article, facultades, apiUrl, userRole } =
+    useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
 
   useEffect(() => {
@@ -141,19 +157,19 @@ export default function ArticuloPage() {
     }
   }, [actionData]);
 
-  const url_image =  article?.image?.url ? `${article?.image?.url}` : undefined
+  const url_image = article?.image?.url ? `${article?.image?.url}` : undefined;
 
   return (
     <>
       <SectionWithHeader>
         <section className="flex flex-col gap-4 lg:flex-row">
-          <aside className="flex flex-row space-y-8 lg:flex-col">
-              <ImageViewer
-                url_img={url_image}
-                alt={`fotografia del articulo ${article.nombre}`}
-                className="z-0 aspect-square size-72 rounded-lg object-cover 2xl:size-96"
-              />
-            <div className="mx-auto flex aspect-square size-60 items-center justify-center">
+          <aside className="flex flex-wrap justify-center gap-8 md:flex-row lg:flex-col lg:justify-start">
+            <ImageViewer
+              url_img={url_image}
+              alt={`fotografia del articulo ${article.nombre}`}
+              className="z-0 aspect-square size-80 rounded-lg object-cover "
+            />
+            <div className="mx-0 flex aspect-square size-80 items-center justify-center lg:mx-auto lg:size-72">
               <ClientOnly
                 fallback={<IconReload className="size-12 animate-spin" />}
               >
@@ -161,17 +177,28 @@ export default function ArticuloPage() {
               </ClientOnly>
             </div>
           </aside>
-          <CardWithDetailsArticle is_supervisor={userRole} apiUrl={apiUrl!} article={article} facultades={facultades} />
+          <CardWithDetailsArticle
+            is_supervisor={userRole}
+            apiUrl={apiUrl!}
+            article={article}
+            facultades={facultades}
+          />
         </section>
       </SectionWithHeader>
-      <SectionWithHeader title="Actualizaciones recientes">
-        {article.cambios.map((c) => (
-          <TextChangedArticle changes={c} key={c.id} />
-        ))}
-      </SectionWithHeader>
-      <SectionWithHeader title="Mantenimientos">
-        <TableMantenimientos mantenimientos={article.mantenimientos} />
-      </SectionWithHeader>
+
+      {article.cambios.length !== 0 && (
+        <SectionWithHeader title="Actualizaciones recientes">
+          {article.cambios.map((c) => (
+            <TextChangedArticle changes={c} key={c.id} />
+          ))}
+        </SectionWithHeader>
+      )}
+
+      {article.mantenimientos.length !== 0 && (
+        <SectionWithHeader title="Mantenimientos">
+          <TableMantenimientos mantenimientos={article.mantenimientos} />
+        </SectionWithHeader>
+      )}
     </>
   );
 }

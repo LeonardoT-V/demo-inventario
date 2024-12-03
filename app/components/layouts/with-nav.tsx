@@ -1,6 +1,5 @@
 import { ROUTES } from "@/lib/routes";
-import { Button, NavLink } from "../ui";
-import { IconLogout } from "@/lib/icons";
+import { NavLink } from "../ui";
 import ConfigurationMenuButton from "../configuration-menu-button";
 import { ComponentPropsWithoutRef } from "react";
 import { Link, useLocation } from "@remix-run/react";
@@ -11,7 +10,9 @@ interface WithNavLayoutProps extends ComponentPropsWithoutRef<"aside"> {
 }
 
 function WithNavLayout({ careerLocation, ...props }: WithNavLayoutProps) {
-  const routes = Object.values(ROUTES);
+  const routes = careerLocation?.career?.is_supervisor
+    ? Object.values(ROUTES)
+    : Object.values(ROUTES).filter((route) => !route.reqAdmin);
   const location = useLocation();
   if (location.pathname === "/login" || location.pathname === "/select-place") {
     return <>{props.children}</>;
@@ -52,9 +53,6 @@ function WithNavLayout({ careerLocation, ...props }: WithNavLayoutProps) {
                 {careerLocation?.career?.nombre}
               </h5>
             </div>
-            {/* <Button variant="secondary" className="h-fit p-2">
-              <IconLogout className="size-3 " />
-            </Button> */}
           </div>
           <ConfigurationMenuButton />
         </footer>

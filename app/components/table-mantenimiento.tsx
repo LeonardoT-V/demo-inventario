@@ -12,7 +12,6 @@ import ModalMantenimientoInfo from "./modal-matenimiento-info";
 import { Badge } from "./ui";
 import { Card } from "./ui/card";
 import { IconMaintance } from "@/lib/icons";
-import CreateMaintanceAction from "./actions/create-maintance";
 
 export default function TableMantenimientos({
   mantenimientos = [],
@@ -21,12 +20,11 @@ export default function TableMantenimientos({
 }) {
   if (mantenimientos.length === 0 || !mantenimientos) {
     return (
-      <Card className="flex flex-col items-center gap-4 p-8">
+      <Card className="flex flex-col items-center gap-4 p-8 py-16">
         <p className="inline-flex items-center gap-1.5 text-lg text-muted-foreground 2xl:text-2xl">
           <IconMaintance />
           <span>No existen mantenimientos</span>
         </p>
-        <CreateMaintanceAction />
       </Card>
     );
   }

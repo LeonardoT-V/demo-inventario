@@ -19,6 +19,7 @@ export async function createNewArticleEntry(data, request: Request) {
     carrera: location?.career?.id,
     registrado: user?.user?.id,
     image: newImageId,
+    responsable: data.responsable,
   };
 
   const response = await fetcherToStrapi<{ data: Articulo }>(`/articulos`, {

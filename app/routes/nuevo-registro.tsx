@@ -18,7 +18,7 @@ import type {
   MetaFunction,
   LoaderFunctionArgs,
 } from "@remix-run/node";
-import { useActionData, useLoaderData, useNavigation } from "@remix-run/react";
+import { useActionData, useLoaderData } from "@remix-run/react";
 import { json, redirect } from "@remix-run/node";
 import { ROUTES } from "@/lib/routes";
 import { renderToaster } from "@/lib/utils";
@@ -38,46 +38,49 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   await requireCareerLocation(request);
   return {
     location: (await getCareerLocationData(request))!,
+    strapi_url: process.env.STRAPI_URL_API ?? "",
   };
 };
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const formData = await request.clone().formData();
-  const valuesData = Object.fromEntries(formData);
-  const entryCreated = await createNewArticleEntry(valuesData, request);
+  const { image, descripcion, ...valuesData } = Object.fromEntries(formData);
 
-  if (entryCreated.error) {
+  if (Object.values(valuesData).includes("")) {
     return json({
-      detail: 'Ha ocurrido un error',
-      message: 'Intenta nuevamente',
-      type: 'error',
+      detail: "Ha ocurrido un error",
+      message: "Rellena todos los campos requeridos",
+      type: "error",
     });
   }
 
+  const entryCreated = await createNewArticleEntry(
+    { ...valuesData, image, descripcion },
+    request
+  );
+
+  if (entryCreated.error) {
+    return json({
+      detail: "Ha ocurrido un error",
+      message: "Intenta nuevamente",
+      type: "error",
+    });
+  }
   return redirect(`${ROUTES.inventario.path}/${entryCreated.data.id}`);
 };
 
 export default function NuevoRegistro() {
-  const { location } = useLoaderData<typeof loader>();
-  const va =useNavigation();
-
+  const { location, strapi_url } = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
-
   useEffect(() => {
     if (actionData) {
       renderToaster({
-        detail: actionData.detail,
-        message: actionData.message,
-        type: 'error',
+        detail: actionData.detail ?? "Articulo creado exitosamente",
+        message: actionData.message ?? "Operación exitosa",
+        type: actionData.type ?? "success",
       });
     }
   }, [actionData]);
-
-  useEffect(() => {
-    if (va.state === 'submitting') {
-      renderToaster({ message: 'Creando registro', type: 'info', detail: 'Este proceso tardar unos segundos' })
-    }
-  }, [va.state]);
 
   return (
     <SectionWithHeader title="Nuevo Registro">
@@ -90,7 +93,7 @@ export default function NuevoRegistro() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <FormRegisterElement location={location} />
+          <FormRegisterElement location={location} strapi_url={strapi_url} />
         </CardContent>
       </Card>
     </SectionWithHeader>

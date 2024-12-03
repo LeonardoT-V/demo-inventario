@@ -1,8 +1,14 @@
 import { IconHome, IconArchive, IconPlusCircle } from "./icons";
 export const ROUTES = {
-  inicio: { name: "Inicio", path: "/", icon: IconHome },
-  inventario: { name: "Inventario", path: "/inventario", icon: IconArchive },
+  inicio: { reqAdmin: false, name: "Inicio", path: "/", icon: IconHome },
+  inventario: {
+    reqAdmin: false,
+    name: "Inventario",
+    path: "/inventario",
+    icon: IconArchive,
+  },
   "nuevo-registro": {
+    reqAdmin: true,
     name: "Nuevo registro",
     path: "/nuevo-registro",
     icon: IconPlusCircle,

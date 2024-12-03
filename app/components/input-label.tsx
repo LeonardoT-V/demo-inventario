@@ -26,7 +26,7 @@ export default function InputLabel({
   const contactIdLabel = id ? id : label;
   return (
     <div className="w-full space-y-0.5">
-      <Label htmlFor={id} label={label} isRequired={isRequired}>
+      <Label htmlFor={contactIdLabel} label={label} isRequired={isRequired}>
         {label}
       </Label>
       <InputComponent

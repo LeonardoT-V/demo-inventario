@@ -32,6 +32,7 @@ export interface Articulo extends StrapiDefaultResponse {
   registrado: Profile;
   carrera: Carrera;
   mantenimientos: Mantenimiento[];
+  responsable: Profile;
   cambios: Cambio[];
   image: Image;
 }
@@ -178,7 +179,9 @@ export type LoginErrorResponse =
 export type Profile = {
   id?: number;
   username?: string;
-  email?: string | undefined;
+  email: string;
+  nombres: string;
+  apellidos: string;
   confirmed?: boolean;
   provider: string;
   blocked?: boolean;
@@ -203,5 +206,5 @@ export type CareerLocation = {
 interface ReturnedMessage {
   detail: string;
   message: string;
-  type?: "default" | "error" | "success" | "info";
+  type?: "default" | "error" | "success" | "info" | "loading" | string;
 }

@@ -11,11 +11,15 @@ export default function ImageViewer({
 }) {
   if (url_img) {
     return (
-      <img src={url_img} alt={alt} className={`bg-card p-4 ${className}`} />
+      <img
+        src={url_img}
+        alt={alt}
+        className={`rounded-lg bg-card ${className}`}
+      />
     );
   }
   return (
-    <div className={`rounded-md bg-card p-4 ${className}`}>
+    <div className={`rounded-lg bg-card p-4 ${className}`}>
       <IconImage className="size-full" />
     </div>
   );

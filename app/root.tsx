@@ -69,7 +69,7 @@ export function App() {
       <body className="flex h-screen min-h-screen w-screen gap-8">
         <WithNavLayout careerLocation={data.careerLocation}>
           <Outlet />
-          <Toaster richColors theme={theme as any} />
+          <Toaster richColors theme={theme as any} visibleToasts={1} />
         </WithNavLayout>
         <ScrollRestoration />
         <Scripts />

@@ -8,7 +8,6 @@ export default function QRCode({
   value: any;
   title?: string;
 }) {
-
   const qrvalue = `Nombre:${value.nombre}
   Creado el: ${value.createdAt}
   Registrado por: ${value.registrado.email}

@@ -23,9 +23,7 @@ export default function ContentLabelWithText({
 }: ContentLabelWithTextProps) {
   return (
     <div {...props}>
-      <h4 className={`${labelStyle[size].title} text-muted-foreground/70`}>
-        {title}
-      </h4>
+      <h4 className={`${labelStyle[size].title} text-primary`}>{title}</h4>
       <p className={`${labelStyle[size].text} text-foreground/90`}>
         {description}
       </p>

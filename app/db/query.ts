@@ -5,7 +5,7 @@ import { GetArticuloResponse, GetOneArticuloResponse } from "@/types";
 
 export async function getArticleById(id: number | string, request: Request) {
   const res = await fetcherToStrapi<GetOneArticuloResponse>(
-    `/articulos/${id}?populate[mantenimientos][populate][0]=encargado&populate[registrado]=registrado&populate[carrera]=carrera&populate[cambios][populate][0]=responsable&populate[mantenimientos][sort][0]=createdAt%3Adesc&populate[cambios][sort][0]=createdAt%3Adesc&populate[image]=image`,
+    `/articulos/${id}?populate[mantenimientos][populate][0]=encargado&populate[registrado]=registrado&populate[carrera]=carrera&populate[cambios][populate][0]=responsable&populate[mantenimientos][sort][0]=createdAt%3Adesc&populate[cambios][sort][0]=createdAt%3Adesc&populate[image]=image&populate[responsable]=responsable`,
     { request }
   );
   return res;
